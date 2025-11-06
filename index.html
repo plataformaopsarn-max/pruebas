@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L4BZ8GDMZ5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-L4BZ8GDMZ5');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRENLyC - Información Regulatoria para Ensayos Clínicos</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7/css/flag-icons.min.css"/>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <section class="hero-section">
+        <img src="Logo2.png" alt="IRENLyC Logo" class="logo-image">
+        <div>
+            <h1 class="main-title">IRENLyC</h1>
+            <p class="main-subtitle">Información Regulatoria para Ensayos Clínicos de Latinoamérica y Caribe</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="search-section">
+            <div class="search-tabs">
+                <button class="tab-button active" onclick="switchTab(event, 'country')">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Búsqueda por País</span>
+                </button>
+                <button class="tab-button" onclick="switchTab(event, 'requirement')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Comparar por Requisito</span>
+                </button>
+                <button class="tab-button" onclick="switchTab(event, 'filter')">
+                    <i class="fas fa-filter"></i>
+                    <span>Filtro Avanzado</span>
+                </button>
+            </div>
+
+            <div id="country-tab" class="tab-content active">
+                <div class="form-group">
+                    <label for="country-select"><i class="fas fa-globe-americas"></i> Seleccione un País:</label>
+                    <select id="country-select">
+                        <option value="">-- Seleccione un país --</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Bolivia">Bolivia</option>
+                        <option value="Brasil">Brasil</option>
+                        <option value="Chile">Chile</option>
+                        <option value="Colombia">Colombia</option>
+                        <option value="Costa Rica">Costa Rica</option>
+                        <option value="Cuba">Cuba</option>
+                        <option value="Ecuador">Ecuador</option>
+                        <option value="El Salvador">El Salvador</option>
+                        <option value="Guatemala">Guatemala</option>
+                        <option value="Haití">Haití</option>
+                        <option value="Honduras">Honduras</option>
+                        <option value="Jamaica">Jamaica</option>
+                        <option value="México">México</option>
+                        <option value="Nicaragua">Nicaragua</option>
+                        <option value="Panamá">Panamá</option>
+                        <option value="Paraguay">Paraguay</option>
+                        <option value="Perú">Perú</option>
+                        <option value="República Dominicana">República Dominicana</option>
+                        <option value="Trinidad y Tobago">Trinidad y Tobago</option>
+                        <option value="Uruguay">Uruguay</option>
+                        <option value="Venezuela">Venezuela</option>
+                    </select>
+                </div>
+                <button class="search-button" onclick="searchByCountry()">
+                    <i class="fas fa-search"></i>
+                    <span>Consultar Requisitos</span>
+                </button>
+            </div>
+
+            <div id="requirement-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="requirement-select"><i class="fas fa-clipboard-list"></i> Seleccionar Requisito:</label>
+                    <select id="requirement-select">
+                        <option value="">Seleccione un requisito...</option>
+                    </select>
+                </div>
+                <button class="search-button" onclick="searchByRequirement()">
+                    <i class="fas fa-search"></i>
+                    <span>Comparar entre Países</span>
+                </button>
+            </div>
+
+            <div id="filter-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="filter-checkbox-container"><i class="fas fa-tasks"></i> Seleccione los criterios que deben cumplir los países:</label>
+                    <div id="filter-checkbox-container"></div>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="clear-button" onclick="clearFilters()">
+                        <i class="fas fa-times"></i> Limpiar Filtros
+                    </button>
+                    <button class="search-button" onclick="searchByFilter()">
+                        <i class="fas fa-filter"></i>
+                        <span>Filtrar Países</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-section" class="results-section">
+            <div id="sidebar-nav" class="sidebar-nav"></div>
+            <div id="main-results-content" class="main-results-content"></div>
+        </div>
+    </div>
+    
+    <button onclick="scrollToSearch()" id="back-to-top-btn" title="Volver a la búsqueda">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>© 2025 IRENLyC – El nombre y el logotipo de este sitio web se utilizan únicamente con fines ilustrativos, como parte de un prototipo en desarrollo.</p>
+            <p style="margin-top: 16px;">
+                Si encuentras información para corregir o actualizar, por favor 
+                <a href="reportes.html" style="color: white; font-weight: 600; text-decoration: underline;">haz clic aquí para reportarla</a>.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
