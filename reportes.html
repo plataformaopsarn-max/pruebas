@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportar Información - IRENLyC</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --primary-teal: #14b8a6;
+            --neutral-50: #f8fafc;
+            --neutral-100: #f1f5f9;
+            --neutral-200: #e2e8f0;
+            --neutral-700: #334155;
+            --neutral-800: #1e293b;
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #0d9488 100%);
+            color: var(--neutral-800);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 48px;
+            box-shadow: var(--shadow-xl);
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .form-header h1 {
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+        .form-header p {
+            color: var(--neutral-700);
+            font-size: 1.1rem;
+        }
+        .form-group {
+            margin-bottom: 28px;
+        }
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+        input[type="text"], input[type="email"], select, textarea {
+            width: 100%;
+            padding: 18px 24px;
+            border: 2px solid var(--neutral-200);
+            border-radius: 12px;
+            font-size: 1.05rem;
+            background: white;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+        }
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .submit-button {
+            width: 100%;
+            border: none;
+            padding: 20px 30px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-teal) 100%);
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.4);
+        }
+        .submit-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .file-upload-wrapper {
+            border: 2px dashed var(--neutral-200);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        .file-upload-wrapper:hover {
+            border-color: var(--primary-teal);
+            background-color: var(--neutral-50);
+        }
+        #file-upload { display: none; }
+        #file-upload-label { font-weight: 500; color: var(--primary-blue); }
+        #file-name { margin-top: 12px; color: var(--neutral-700); font-style: italic; }
+        .alert {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .alert-success { background-color: #d1fae5; color: #065f46; }
+        .alert-error { background-color: #fee2e2; color: #991b1b; }
+        
+        /* --- INICIO: Estilos para el enlace de retorno --- */
+        .return-link-container {
+            width: 100%;
+            max-width: 800px; /* Mismo ancho que el contenedor principal */
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .return-link-container a {
+            color: var(--neutral-100);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+        }
+        .return-link-container a:hover {
+            text-decoration: underline;
+            color: white;
+        }
+        /* --- FIN: Estilos para el enlace de retorno --- */
+    </style>
+</head>
+<body>
+    <body>
+    <!-- 🟢 AÑADE ESTE BLOQUE DE CÓDIGO AQUÍ 🟢 -->
+    
+    
+    <div class="container">
+        <div class="return-link-container">
+        <a href="index.html">
+            <i class="fas fa-arrow-left"></i> Volver a la Búsqueda Principal
+        </a>
+    </div>
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Reportar Información</h1>
+                <p>Ayúdenos a mejorar. Si encontró información inexacta o desactualizada, por favor, déjenos su comentario.</p>
+            </div>
+            <div id="alert-message"></div>
+            <form id="report-form">
+                <div class="form-group">
+                    <label for="full-name">Nombre y Apellido (Opcional)</label>
+                    <input type="text" id="full-name" name="full-name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico (Opcional)</label>
+                    <input type="email" id="email" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="country-select">País sobre el que comenta <span style="color:red;">*</span></label>
+                    <select id="country-select" name="country" required>
+                         <option value="">-- Seleccione un país --</option>
+                        <option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brasil">Brasil</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Ecuador">Ecuador</option><option value="El Salvador">El Salvador</option><option value="Guatemala">Guatemala</option><option value="Haití">Haití</option><option value="Honduras">Honduras</option><option value="Jamaica">Jamaica</option><option value="México">México</option><option value="Nicaragua">Nicaragua</option><option value="Panamá">Panamá</option><option value="Paraguay">Paraguay</option><option value="Perú">Perú</option><option value="República Dominicana">República Dominicana</option><option value="Trinidad y Tobago">Trinidad y Tobago</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Comentarios <span style="color:red;">*</span></label>
+                    <textarea id="comments" name="comments" placeholder="Describa aquí el error, la información a corregir o su sugerencia..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="file-upload">Adjuntar Documento (PDF, Opcional)</label>
+                    <label for="file-upload" class="file-upload-wrapper">
+                        <i class="fas fa-cloud-upload-alt fa-2x" style="color: var(--primary-teal);"></i>
+                        <div id="file-upload-label">Haga clic para seleccionar un archivo</div>
+                        <div id="file-name"></div>
+                    </label>
+                    <input type="file" id="file-upload" name="file-upload" accept=".pdf">
+                </div>
+                <button type="submit" class="submit-button" id="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Enviar Comentario
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://rhbudrqpetrzispcacyw.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoYnVkcnFwZXRyemlzcGNhY3l3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1ODI4NTQsImV4cCI6MjA3NDE1ODg1NH0.6uQ2Hg1aLHAQoG3HwxJBeBbrFRGRxUilH-60CRNl3J8';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        const form = document.getElementById('report-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const alertMessage = document.getElementById('alert-message');
+        const fileInput = document.getElementById('file-upload');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = `Archivo seleccionado: ${fileInput.files[0].name}`;
+            } else {
+                fileNameDisplay.textContent = '';
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validar que al menos un comentario o un archivo se envíe
+            if (!form.comments.value.trim() && fileInput.files.length === 0) {
+                showAlert('Por favor, escriba un comentario o adjunte un archivo.', 'error');
+                return;
+            }
+
+            setLoading(true);
+            let fileUrl = null;
+
+            try {
+                // 1. Subir el archivo si existe
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const fileName = `${Date.now()}_${file.name}`;
+                    const { data: uploadData, error: uploadError } = await supabaseClient
+                        .storage
+                        .from('reportes') // Nombre de tu bucket de Storage
+                        .upload(fileName, file);
+
+                    if (uploadError) throw uploadError;
+
+                    // 2. Obtener la URL pública del archivo subido
+                    const { data: urlData } = supabaseClient
+                        .storage
+                        .from('reportes')
+                        .getPublicUrl(fileName);
+                    
+                    fileUrl = urlData.publicUrl;
+                }
+
+                // 3. Guardar la información en la tabla de Supabase
+                const formData = {
+                    nombre_apellido: form['full-name'].value || null,
+                    correo: form.email.value || null,
+                    pais: form.country.value,
+                    comentarios: form.comments.value || null,
+                    documento_adjunto_url: fileUrl
+                };
+
+                const { error: insertError } = await supabaseClient
+                    .from('reportes_usuarios') // Nombre de tu tabla
+                    .insert([formData]);
+
+                if (insertError) throw insertError;
+                
+                showAlert('¡Gracias! Su comentario ha sido enviado correctamente.', 'success');
+                form.reset();
+                fileNameDisplay.textContent = '';
+
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert(`Error al enviar el formulario: ${error.message}`, 'error');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        function setLoading(isLoading) {
+            submitBtn.disabled = isLoading;
+            submitBtn.innerHTML = isLoading 
+                ? '<i class="fas fa-spinner fa-spin"></i> Enviando...'
+                : '<i class="fas fa-paper-plane"></i> Enviar Comentario';
+        }
+
+        function showAlert(message, type) {
+            alertMessage.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            window.scrollTo(0, 0);
+        }
+
+    </script>
+</body>
+</html>
