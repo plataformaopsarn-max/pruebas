@@ -190,6 +190,7 @@ select:focus {
     display: flex; 
 }
 
+/* --- SIDEBAR NAVIGATION (Mejorado para scroll independiente) --- */
 .sidebar-nav { 
     flex-shrink: 0; 
     width: 320px; 
@@ -197,8 +198,27 @@ select:focus {
     border-radius: 16px; 
     padding: 28px; 
     box-shadow: var(--shadow-md); 
+    
+    /* Sticky y Scroll independiente */
     position: sticky; 
     top: 24px; 
+    max-height: calc(100vh - 48px); /* Altura máxima ajustada a la ventana */
+    overflow-y: auto; /* Habilita scroll interno */
+    scrollbar-width: thin; 
+    scrollbar-color: var(--primary-teal) var(--neutral-100);
+}
+
+/* Estilo del scrollbar para Webkit */
+.sidebar-nav::-webkit-scrollbar {
+    width: 8px;
+}
+.sidebar-nav::-webkit-scrollbar-track {
+    background: var(--neutral-100);
+    border-radius: 4px;
+}
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background-color: var(--primary-teal);
+    border-radius: 4px;
 }
 
 .sidebar-nav h3 { 
@@ -263,6 +283,28 @@ select:focus {
     background-color: var(--primary-teal); 
     color: white; 
     transform: translateX(4px); 
+}
+
+/* Botón para menú móvil (Nuevo) */
+#mobile-nav-toggle {
+    display: none;
+    width: 100%;
+    background: white;
+    color: var(--primary-blue);
+    border: 2px solid var(--neutral-200);
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: background-color 0.3s ease;
+}
+
+#mobile-nav-toggle:hover {
+    background: var(--neutral-50);
 }
 
 .main-results-content { 
@@ -704,13 +746,35 @@ select:focus {
 @media (max-width: 992px) { 
     .results-section { 
         flex-direction: column; 
+        position: relative;
     } 
     
+    /* Sidebar en Mobile: Oculto por defecto */
     .sidebar-nav { 
-        display: none !important;
+        display: none; 
         width: 100%; 
-        position: static; 
+        position: relative; 
+        top: 0;
+        max-height: 400px; /* Altura limitada en mobile */
+        margin-bottom: 24px;
+        z-index: 50;
     }
+
+    /* Clase para mostrar el sidebar en mobile */
+    .sidebar-nav.mobile-visible {
+        display: block !important;
+        animation: slideDown 0.3s ease-out;
+    }
+    
+    /* Mostrar el botón toggle */
+    #mobile-nav-toggle {
+        display: flex;
+    }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 768px) { 
@@ -954,213 +1018,201 @@ select:focus {
     }
 }
 
-/* Print Styles */
+/* Print Styles - Optimizados para evitar cortes */
 @media print {
-    body {
-        background: white !important;
-        color: black;
-        font-size: 10pt;
+    /* 1. Configuración de la página física */
+    @page {
+        margin: 1.5cm 1.5cm 2cm 1.5cm; /* Márgenes tipo documento (Arr, Der, Aba, Izq) */
+        size: A4; /* O 'letter' según tu región */
     }
-    
-    .hero-section, .search-section, .sidebar-nav, .main-footer, 
-    #back-to-top-btn, .print-button-container, .source-toggle, 
-    .expand-info-button, .comparison-card-footer, .main-title, 
-    .main-subtitle, .sidebar-category-title .indicator-icon {
+
+    /* 2. Reset global para impresión */
+    html, body {
+        width: 100%;
+        height: auto !important;
+        overflow: visible !important;
+        background-color: white !important;
+        color: #000;
+        font-family: 'Times New Roman', serif; /* Fuente serif se lee mejor en informes, o usa 'Inter' si prefieres moderno */
+        font-size: 11pt;
+        line-height: 1.5;
+        -webkit-print-color-adjust: exact; /* Obliga a imprimir colores de fondo (Chrome/Edge) */
+        print-color-adjust: exact; /* Firefox */
+    }
+
+    /* 3. Ocultar todo lo que no es el reporte */
+    .hero-section, 
+    .search-section, 
+    .main-footer, 
+    #back-to-top-btn, 
+    .print-button-container, 
+    #mobile-nav-toggle, 
+    .sidebar-nav,
+    .source-toggle, 
+    .expand-info-button, 
+    .comparison-card-footer,
+    .sidebar-category-title .indicator-icon {
         display: none !important;
     }
-    
+
+    /* 4. Estructura principal */
+    .container, .results-section, .main-results-content, .results-content-inner {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    /* 5. Encabezado del Reporte (Logo y Título) */
     #print-header {
         display: block !important;
         text-align: center;
-        margin-bottom: 15px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #ccc;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--primary-blue);
     }
     
     #print-header img {
-        max-width: 180px;
+        max-width: 200px;
         height: auto;
-        margin-bottom: 4px;
-        filter: none;
     }
     
     #print-header h1 {
-        font-size: 1.1rem;
+        margin-top: 10px;
+        font-size: 16pt;
         color: var(--primary-blue);
-        margin: 0;
+        text-transform: uppercase;
+    }
+
+    /* 6. Encabezado del País (Bandera y Nombre) */
+    .country-header {
+        display: flex !important;
+        flex-direction: row !important; /* Forzar fila para ahorrar espacio vertical */
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        page-break-after: avoid;
     }
     
-    .container {
-        max-width: 100%;
-        padding: 0;
-        margin: 0;
+    .country-flag {
+        font-size: 2.5rem !important;
+        margin-right: 15px;
     }
     
-    .results-section, .main-results-content, .results-content-inner {
-        display: block !important;
-        width: 100% !important;
-        box-shadow: none !important;
-        padding: 0 !important;
+    .country-name {
+        font-size: 22pt !important;
+        color: var(--primary-blue) !important;
         margin: 0 !important;
     }
-    
-    h2 {
-        margin-top: 12px !important;
-        margin-bottom: 6px !important;
-        page-break-after: avoid;
-        font-size: 1.1rem !important;
-    }
-    
-    h3 {
-        margin-top: 10px !important;
-        margin-bottom: 5px !important;
-        page-break-after: avoid;
-        font-size: 1rem !important;
-    }
-    
-    h4 {
-        margin-top: 8px !important;
-        margin-bottom: 4px !important;
-        page-break-after: avoid;
-        font-size: 0.95rem !important;
-    }
-    
-    .country-header {
-        border-bottom: 2px solid var(--primary-teal);
-        padding-bottom: 8px !important;
-        margin-bottom: 12px !important;
-        page-break-after: avoid;
-    }
-    
-    .country-flag { 
-        font-size: 1.8rem !important; 
-    }
-    
-    .country-name { 
-        font-size: 1.3rem !important;
-        margin-bottom: 2px !important;
-    }
-    
-    .country-header > div > div:last-child {
-        font-size: 0.85rem !important;
-    }
-    
+
+    /* 7. Resumen Ejecutivo */
     .executive-summary {
-        padding: 8px !important;
-        margin-bottom: 12px !important;
-        border-left: 3px solid var(--primary-blue);
+        background-color: #f0f9ff !important; /* Azul muy claro para ahorrar tinta pero dar contexto */
+        border: 1px solid #bae6fd !important;
+        border-left: 5px solid var(--primary-blue) !important;
+        padding: 15px !important;
+        margin-bottom: 25px;
         page-break-inside: avoid;
-        background: #f5f5f5 !important;
+        border-radius: 5px;
     }
-    
+
     .executive-summary h2 {
-        font-size: 1rem !important;
-        margin-bottom: 6px !important;
+        margin-top: 0 !important;
+        font-size: 14pt !important;
+        color: var(--primary-blue);
+    }
+
+    /* 8. Títulos de Categorías (1. Autoridades, etc.) */
+    /* IMPORTANTE: Forzamos salto de página antes de cada categoría grande */
+    h2[id^="category-"] {
+        page-break-before: always; 
+        margin-top: 0 !important;
+        padding-top: 30px; /* Espacio al inicio de la nueva hoja */
+        font-size: 16pt !important;
+        border-bottom: 2px solid #eee;
+        margin-bottom: 15px !important;
+        color: var(--primary-blue) !important;
     }
     
-    .summary-item {
-        margin-bottom: 3px !important;
-        font-size: 8.5pt;
-        line-height: 1.3;
+    /* Excepción: No saltar página en la primera categoría (después del resumen) */
+    h2[id="category-1"] {
+        page-break-before: auto;
+        padding-top: 10px;
     }
-    
-    .summary-item strong {
-        font-size: 8.5pt;
-    }
-    
+
+    /* 9. Bloques de Preguntas y Respuestas */
     .requirement {
-        padding: 8px 0 !important;
-        border-bottom: 1px dashed #ccc;
-        page-break-inside: avoid;
+        padding: 10px 0 !important;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+        page-break-inside: avoid; /* Evita que una pregunta se corte a la mitad entre hojas */
     }
-    
+
     .requirement-title {
-        font-weight: 700 !important;
-        color: var(--neutral-800);
-        margin-bottom: 4px !important;
-        font-size: 9.5pt !important;
-        line-height: 1.3;
+        font-size: 11pt !important;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 5px;
     }
-    
+
     .requirement-direct-answer {
-        padding: 8px !important;
-        margin: 4px 0 !important;
-        border-left: 3px solid var(--primary-teal);
-        font-size: 8.5pt !important;
-        background: #f8f8f8 !important;
-        line-height: 1.4;
+        background-color: #f5f5f5 !important; /* Gris muy claro */
+        border-left: 3px solid var(--primary-green) !important;
+        padding: 8px 12px !important;
+        font-style: italic;
+        margin: 5px 0 10px 0 !important;
+        border-radius: 4px;
     }
-    
+
     .requirement-detail {
-        display: block !important;
-        margin-top: 4px !important;
-        font-size: 8pt !important;
-        line-height: 1.4;
+        font-size: 10.5pt !important;
+        text-align: justify;
+        color: #333;
     }
     
+    /* Fuente (oculta botón, muestra texto) */
     .requirement-source {
         display: block !important;
-        margin-top: 4px !important;
-        padding: 6px !important;
-        font-size: 7.5pt !important;
-        background: #fafafa !important;
-        line-height: 1.3;
-    }
-    
-    .resource-subtitle {
-        margin-top: 12px !important;
-        margin-bottom: 8px !important;
-        font-size: 1rem !important;
-        page-break-after: avoid;
-    }
-    
-    .resource-card {
-        padding: 8px !important;
-        margin-bottom: 6px !important;
-        font-size: 8.5pt !important;
-        page-break-inside: avoid;
-        line-height: 1.3;
-    }
-    
-    .resource-card h4 {
         font-size: 9pt !important;
-        margin-bottom: 3px !important;
-    }
-    
-    .resource-card p {
-        margin-bottom: 3px !important;
-        font-size: 8.5pt !important;
-    }
-    
-    .resource-card a {
-        font-size: 8.5pt !important;
-        word-break: break-all;
-    }
-    
-    /* Forzar saltos de página para evitar cortes */
-    .results-content-inner > h2 {
-        page-break-before: auto;
-    }
-    
-    /* Evitar que las secciones se corten */
-    .requirement,
-    .resource-card,
-    .executive-summary {
+        color: #666;
+        border: 1px dashed #ccc;
+        padding: 5px;
+        margin-top: 5px;
         page-break-inside: avoid;
     }
-    
-    /* Permitir saltos antes de nuevas categorías si es necesario */
-    .results-content-inner > h2:nth-of-type(n+4) {
-        page-break-before: auto;
+
+    /* 10. Recursos y Enlaces */
+    .resource-subtitle {
+        font-size: 13pt !important;
+        margin-top: 20px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .resource-card {
+        border: 1px solid #ddd !important;
+        background: white !important;
+        padding: 10px !important;
+        margin-bottom: 10px;
+        page-break-inside: avoid;
+    }
+
+    /* Limpieza de enlaces para impresión */
+    a {
+        text-decoration: none !important;
+        color: #1e40af !important;
+        font-weight: bold;
     }
     
-    @page {
-        margin: 1.5cm 1cm;
-        size: letter;
+    /* Opcional: Si quieres ver la URL escrita en papel, descomenta esto: */
+    /*
+    a::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        font-weight: normal;
+        color: #666;
     }
-    
-    /* Asegurar que todo el contenido sea visible */
-    * {
-        overflow: visible !important;
-    }
+    */
 }

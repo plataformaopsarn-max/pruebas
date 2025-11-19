@@ -118,6 +118,25 @@ function addEventListeners() {
             }
             return;
         }
+
+        // Mobile Menu Toggle
+        const mobileToggle = event.target.closest('#mobile-nav-toggle');
+        if (mobileToggle) {
+            const sidebar = document.getElementById('sidebar-nav');
+            sidebar.classList.toggle('mobile-visible');
+            
+            const icon = mobileToggle.querySelector('i');
+            if (sidebar.classList.contains('mobile-visible')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+                mobileToggle.querySelector('span').textContent = "Cerrar Índice";
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                mobileToggle.querySelector('span').textContent = "Índice de Temas";
+            }
+            return;
+        }
     });
 
     // Sidebar navigation event delegation
@@ -128,6 +147,21 @@ function addEventListeners() {
             if (parentCategory) {
                 parentCategory.classList.toggle('active');
             }
+            return; 
+        }
+
+        // Auto-close on mobile when link is clicked
+        const link = event.target.closest('a');
+        if (link && window.innerWidth <= 992) {
+            document.getElementById('sidebar-nav').classList.remove('mobile-visible');
+            // Reset toggle button state
+            const btnIcon = document.querySelector('#mobile-nav-toggle i');
+            const btnSpan = document.querySelector('#mobile-nav-toggle span');
+            if(btnIcon) {
+                btnIcon.classList.remove('fa-times');
+                btnIcon.classList.add('fa-bars');
+            }
+            if(btnSpan) btnSpan.textContent = "Índice de Temas";
         }
     });
 
@@ -186,18 +220,29 @@ function displayCountryResults(faqData, summaryData, linksData) {
     const mainContent = document.getElementById('main-results-content');
     const sidebarNav = document.getElementById('sidebar-nav');
     
+    // Reset sidebar for desktop/mobile view
+    sidebarNav.classList.remove('mobile-visible');
+    sidebarNav.style.display = ''; 
+
     let mainHtml = `<div class="results-content-inner">
         <div id="print-header">
             <img src="Logo2.png" alt="IRENLyC Logo">
             <h1>Información Regulatoria para Ensayos Clínicos de Latinoamérica y Caribe</h1>
         </div>
         
+        <!-- NUEVO ORDEN: Botón Toggle primero (Solo mobile) -->
+        <button id="mobile-nav-toggle">
+            <span>Índice de Temas</span>
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Botón Print segundo -->
         <div class="print-button-container"> 
             <button onclick="printReport()" class="search-button report-print-btn">
-                <i class="fas fa-print"></i> <span>Imprimir/Generar PDF del Informe</span>
+                <i class="fas fa-print"></i> <span>Imprimir / PDF</span>
             </button>
         </div>
-        
+
         <div class="country-header">
             <div class="country-flag"><span class="${countryFlags[faqData.pais]}"></span></div>
             <div>
@@ -297,7 +342,6 @@ function displayCountryResults(faqData, summaryData, linksData) {
 
     mainContent.innerHTML = mainHtml;
     sidebarNav.innerHTML = sidebarHtml;
-    sidebarNav.style.display = 'block';
     document.getElementById('results-section').classList.add('show');
 }
 
