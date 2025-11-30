@@ -1,140 +1,122 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L4BZ8GDMZ5"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-L4BZ8GDMZ5');
-    </script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRENLyC - Información Regulatoria para Ensayos Clínicos</title>
+    <title>InfoRegLAC - Información Regulatoria</title>
     
-    <!-- External Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- 1. Estilos: Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Fuente: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 3. Iconos: Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- 4. Banderas -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7/css/flag-icons.min.css"/>
-    
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- 5. Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Animaciones */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        .slide-up { animation: slideUp 0.5s ease-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Estilos del Mapa */
+        .map-path { transition: all 0.3s ease; cursor: pointer; }
+        .map-path:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .map-tooltip { pointer-events: none; }
+
+        /* Scrollbar personalizado para el menú lateral */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Estilos de Impresión */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+            .page-break { page-break-inside: avoid; }
+            
+            /* Ajustes específicos para impresión */
+            .bg-slate-50 { background-color: white !important; }
+            .shadow-sm, .shadow-md, .shadow-lg { box-shadow: none !important; border: 1px solid #ddd !important; }
+            .max-h-\[80vh\] { max-height: none !important; overflow: visible !important; }
+            /* Asegurar que el contenido se expanda */
+            .lg\:col-span-3 { width: 100% !important; grid-column: span 3 / span 3; }
+            .lg\:col-span-1 { display: none !important; } /* Ocultar sidebar en impresión */
+        }
+        .print-only { display: none; }
+    </style>
 </head>
-<body>
-    <section class="hero-section">
-        <img src="Logo2.png" alt="IRENLyC Logo" class="logo-image">
-        <div>
-            <h1 class="main-title">IRENLyC</h1>
-            <p class="main-subtitle">Información Regulatoria para Ensayos Clínicos de Latinoamérica y Caribe</p>
-        </div>
-    </section>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
-    <div class="container">
-        <div class="search-section">
-            <div class="search-tabs">
-                <button class="tab-button active" onclick="switchTab(event, 'country')">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Búsqueda por País</span>
-                </button>
-                <button class="tab-button" onclick="switchTab(event, 'requirement')">
-                    <i class="fas fa-clipboard-list"></i>
-                    <span>Comparar por Requisito</span>
-                </button>
-                <button class="tab-button" onclick="switchTab(event, 'filter')">
-                    <i class="fas fa-filter"></i>
-                    <span>Filtro Avanzado</span>
-                </button>
-            </div>
-
-            <div id="country-tab" class="tab-content active">
-                <div class="form-group">
-                    <label for="country-select"><i class="fas fa-globe-americas"></i> Seleccione un País:</label>
-                    <select id="country-select">
-                        <option value="">-- Seleccione un país --</option>
-                        <option value="Argentina">Argentina</option>
-                        <option value="Bolivia">Bolivia</option>
-                        <option value="Brasil">Brasil</option>
-                        <option value="Chile">Chile</option>
-                        <option value="Colombia">Colombia</option>
-                        <option value="Costa Rica">Costa Rica</option>
-                        <option value="Cuba">Cuba</option>
-                        <option value="Ecuador">Ecuador</option>
-                        <option value="El Salvador">El Salvador</option>
-                        <option value="Guatemala">Guatemala</option>
-                        <option value="Haití">Haití</option>
-                        <option value="Honduras">Honduras</option>
-                        <option value="Jamaica">Jamaica</option>
-                        <option value="México">México</option>
-                        <option value="Nicaragua">Nicaragua</option>
-                        <option value="Panamá">Panamá</option>
-                        <option value="Paraguay">Paraguay</option>
-                        <option value="Perú">Perú</option>
-                        <option value="República Dominicana">República Dominicana</option>
-                        <option value="Trinidad y Tobago">Trinidad y Tobago</option>
-                        <option value="Uruguay">Uruguay</option>
-                        <option value="Venezuela">Venezuela</option>
-                    </select>
+    <!-- NAVIGATION -->
+    <nav class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="app.goHome()">
+                    <div class="w-9 h-9 bg-gradient-to-br from-blue-700 to-teal-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-200 transition-transform group-hover:scale-105">
+                        <i data-lucide="globe-2" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-800 to-teal-600 tracking-tight">
+                            InfoRegLAC
+                        </span>
+                        <span class="hidden sm:block text-[10px] text-slate-400 font-medium uppercase tracking-wider -mt-1">
+Información Regulatoria para Ensayos Clínicos en América Latina y el Caribe                        </span>
+                    </div>
                 </div>
-                <button class="search-button" onclick="searchByCountry()">
-                    <i class="fas fa-search"></i>
-                    <span>Consultar Requisitos</span>
-                </button>
-            </div>
-
-            <div id="requirement-tab" class="tab-content">
-                <div class="form-group">
-                    <label for="requirement-select"><i class="fas fa-clipboard-list"></i> Seleccionar Requisito:</label>
-                    <select id="requirement-select">
-                        <option value="">Seleccione un requisito...</option>
-                    </select>
-                </div>
-                <button class="search-button" onclick="searchByRequirement()">
-                    <i class="fas fa-search"></i>
-                    <span>Comparar entre Países</span>
-                </button>
-            </div>
-
-            <div id="filter-tab" class="tab-content">
-                <div class="form-group">
-                    <label for="filter-checkbox-container"><i class="fas fa-tasks"></i> Seleccione los criterios que deben cumplir los países:</label>
-                    <div id="filter-checkbox-container"></div>
-                </div>
-                <div class="button-group">
-                    <button type="button" class="clear-button" onclick="clearFilters()">
-                        <i class="fas fa-times"></i> Limpiar Filtros
+                
+                <div class="flex items-center gap-2">
+                    <button onclick="app.setView('home')" id="nav-home" class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-500 hover:bg-slate-50">
+                        <i data-lucide="layout-grid" class="w-4 h-4"></i> <span class="hidden sm:inline">Mapa</span>
                     </button>
-                    <button class="search-button" onclick="searchByFilter()">
-                        <i class="fas fa-filter"></i>
-                        <span>Filtrar Países</span>
+                    <button onclick="app.setView('compare')" id="nav-compare" class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-500 hover:bg-slate-50">
+                        <i data-lucide="scale" class="w-4 h-4"></i> <span class="hidden sm:inline">Comparar</span>
+                    </button>
+                    <button onclick="app.setView('filter')" id="nav-filter" class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 text-slate-500 hover:bg-slate-50">
+                        <i data-lucide="filter" class="w-4 h-4"></i> <span class="hidden sm:inline">Filtrar</span>
                     </button>
                 </div>
             </div>
         </div>
+    </nav>
 
-        <div id="results-section" class="results-section">
-            <div id="sidebar-nav" class="sidebar-nav"></div>
-            <div id="main-results-content" class="main-results-content"></div>
-        </div>
-    </div>
-    
-    <button onclick="scrollToSearch()" id="back-to-top-btn" title="Volver a la búsqueda">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+    <!-- MAIN CONTENT -->
+    <main id="app-container" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- El contenido se inyecta aquí vía JS -->
+    </main>
 
-    <footer class="main-footer">
-        <div class="footer-content">
-            <p>© 2025 IRENLyC – El nombre y el logotipo de este sitio web se utilizan únicamente con fines ilustrativos, como parte de un prototipo en desarrollo.</p>
-            <p style="margin-top: 16px;">
-                Si encuentras información para corregir o actualizar, por favor 
-                <a href="reportes.html" style="color: white; font-weight: 600; text-decoration: underline;">haz clic aquí para reportarla</a>.
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-8 mt-auto no-print">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex justify-center items-center gap-2 mb-4 opacity-50">
+                <i data-lucide="globe-2" class="w-4 h-4"></i>
+                <span class="font-bold text-lg">InfoRegLAC</span>
+            </div>
+            <p class="text-slate-400 text-sm max-w-lg mx-auto mb-4">
+                &copy; 2025 InfoRegLAC. El nombre y el logotipo se utilizan únicamente con fines ilustrativos como parte de un prototipo en desarrollo.
             </p>
+            <a href="reportes.html" class="text-xs text-blue-600 font-medium hover:underline">
+                Reportar un error o sugerir actualización
+            </a>
         </div>
     </footer>
 
-    <!-- Custom JavaScript -->
-    <script src="script.js"></script>
+    <!-- SCROLL TO TOP BUTTON (Injected via JS but styled here for reference) -->
+    
+    <!-- LÓGICA PRINCIPAL -->
+    <script type="module" src="main.js"></script>
 </body>
 </html>

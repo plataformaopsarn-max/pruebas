@@ -1,0 +1,5 @@
+{
+  "name": "InfoRegLAC",
+  "description": "Información Regulatoria para Ensayos Clínicos en América Latina y el Caribe. Plataforma interactiva con mapas, comparativas y filtros avanzados (Vanilla JS).",
+  "requestFramePermissions": []
+}
