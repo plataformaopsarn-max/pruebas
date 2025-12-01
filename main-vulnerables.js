@@ -92,7 +92,7 @@ const QUESTIONS = {
     '3.2': '¿La normativa establece una edad específica que define "menor de edad" para efectos de investigación clínica?',
     '3.3': '¿La normativa establece categorías diferenciadas por edad (neonatos, lactantes, niños, adolescentes) con requisitos distintos?',
     '3.4': '¿Se exige que la investigación pediátrica responda a necesidades de salud propias de los menores y no pueda realizarse en adultos?',
-    '3.5': '¿Se requiere el consentimiento de ambos padres/tutores legales, o es suficiente uno solo?',
+    '3.5': '¿Se requiere el consentimiento de ambos padres/tutores legales?',
     '3.6': '¿Se requiere obtener el asentimiento del menor además del consentimiento de los padres/tutores?',
     '3.7': '¿La normativa establece que el rechazo o disentimiento del menor es vinculante (puede vetar su participación)?',
     '4.1': '¿Está permitida la investigación en personas sin capacidad de otorgar consentimiento informado?',
