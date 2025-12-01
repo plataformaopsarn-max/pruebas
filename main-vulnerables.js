@@ -1,5 +1,6 @@
 
-// --- CONFIGURACIÓN Y CONSTANTES ---
+
+// --- CONFIGURACIÓN Y CONSTANTES (POBLACIONES VULNERABLES) ---
 
 const SUPABASE_URL = 'https://rhbudrqpetrzispcacyw.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoYnVkcnFwZXRyemlzcGNhY3l3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1ODI4NTQsImV4cCI6MjA3NDE1ODg1NH0.6uQ2Hg1aLHAQoG3HwxJBeBbrFRGRxUilH-60CRNl3J8';
@@ -65,58 +66,49 @@ const COUNTRIES_LIST = [
     { id: 'VE', name: 'Venezuela', flagCode: 've', region: 'South America' },
 ];
 
+// --- CATEGORÍAS ESPECÍFICAS DE VULNERABLES ---
 const CATEGORIES = [
-    { id: 1, name: 'Autoridades y marco general', icon: 'scale' },
-    { id: 2, name: 'Rol y obligaciones del patrocinador', icon: 'briefcase' },
-    { id: 3, name: 'Autorización inicial del ensayo clínico', icon: 'file-check' },
-    { id: 4, name: 'Gestión del producto en investigación', icon: 'flask-conical' },
-    { id: 5, name: 'Conducción y cierre del ensayo', icon: 'activity' },
-    { id: 6, name: 'Regulaciones específicas adicionales', icon: 'scroll' },
-    { id: 7, name: 'Recursos prácticos', icon: 'link' }
+    { id: 1, name: 'Marco regulatorio general', icon: 'scale' },
+    { id: 2, name: 'Investigación en mujeres embarazadas y lactancia', icon: 'baby' },
+    { id: 3, name: 'Investigación en niños, niñas y adolescentes', icon: 'users' },
+    { id: 4, name: 'Personas sin capacidad de consentir', icon: 'brain-circuit' },
+    { id: 5, name: 'Pueblos originarios o comunidades indígenas', icon: 'tent' }
 ];
 
+// --- PREGUNTAS ESPECÍFICAS DE VULNERABLES ---
 const QUESTIONS = {
-    '1.1': '¿Cuál es la principal Autoridad Reguladora Nacional (ARN) para ensayos clínicos?',
-    '1.2': '¿Cuáles son las normativas principales que rigen la investigación en salud?',
-    '1.3': '¿Cuáles son las normativas principales que rigen la autorización de ensayos clínicos?',
-    '1.4': '¿Se requiere la aprobación de un Comité de Ética en Investigación (CEI)?',
-    '1.5': '¿La aprobación de un Comité de Ética en Investigación (CEI) debe ser previa a la presentación frente a la Autoridad Regulatoria?',
-    '1.6': '¿Existe un registro nacional o sistema de acreditación para los CEI?',
-    '1.7': '¿Se establece qué tipo de investigaciones deben ser autorizadas previamente al inicio por la autoridad regulatoria?',
-    '2.1': '¿La normativa define al patrocinador de un ensayo clínico?',
-    '2.2': '¿Se requiere que el patrocinador tenga un representante legal o una entidad jurídica domiciliada en el país?',
-    '2.3': '¿Se establecen los requisitos que debe cumplir el patrocinador para poder actuar como tal?',
-    '2.4': '¿Se establecen los requisitos que debe cumplir el patrocinador si se actúa a través de una Organización de Investigación por Contrato (OIC / CRO)?',
-    '2.5': '¿Existen requisitos específicos para la selección de sitios o investigadores?',
-    '2.6': '¿Se establecen requisitos sobre seguros y compensación para los participantes?',
-    '3.1': '¿Se establece cuál es el contenido esencial del envío para la autorización inicial?',
-    '3.2': '¿Se establece cómo es el proceso de envío (plataforma, formato)?',
-    '3.3': '¿Se definen cuáles son los plazos regulatorios oficiales para la cronología de la revisión?',
-    '3.4': '¿Se deben pagar tasas (aranceles) por la evaluación del ensayo?',
-    '3.5': '¿Es obligatorio el registro público del ensayo clínico antes de su inicio?',
-    '3.6': '¿Existen mecanismos de reconocimiento de evaluaciones o acreditaciones realizadas por autoridades regulatorias o éticas fuera del país?',
-    '3.7': '¿Cuál es el orden secuencial de pasos que deben cumplir el patrocinador, la institución y el investigador principal desde el principio del proceso hasta la autorización para el inicio del estudio?',
-    '4.1': '¿Se establecen requisitos de etiquetado para el PI?',
-    '4.2': '¿Se requiere prueba de Buenas Prácticas de Manufactura (BPM/GMP) para el PI?',
-    '4.3': '¿La aprobación del ensayo incluye la autorización para importar/usar el PI?',
-    '5.1': 'Informes de Seguridad: ¿Se establecen cuáles son los requisitos, canales, mecanismos y plazos para notificar EAS y RASI/SUSARs?',
-    '5.2': '¿Se requiere la presentación de informes anuales de seguridad?',
-    '5.3': '¿Se requiere la presentación de informes de seguimiento periódicos?',
-    '5.4': '¿Se establece qué tipo de enmiendas al protocolo requieren aprobación previa de la ARN y/o del CEI?',
-    '5.5': '¿Existen obligaciones sobre el acceso post-estudio al tratamiento en investigación?',
-    '6.1': '¿Existe una ley de protección de datos personales aplicable a los ensayos clínicos?',
-    '6.2': '¿Existen normativas o guías específicas para ensayos clínicos con vacunas?',
-    '6.3': '¿Existen normativas o guías específicas para la recolección y/o utilización de muestras para investigación?',
-    '6.4': 'Ensayos clínicos para situaciones especiales: ¿Existen normativas o guías específicas para otro tipo de ensayos clínicos?'
+    '1.1': '¿La normativa nacional define explícitamente el concepto de "población vulnerable" o "sujeto vulnerable" en el contexto de investigación en seres humanos?',
+    '1.2': '¿La normativa incluye definiciones específicas de "riesgo mínimo" aplicables a poblaciones vulnerables?',
+    '1.3': '¿Se requieren aprobaciones o evaluaciones adicionales (más allá de ARN y CEI estándar) para estudios que incluyan poblaciones vulnerables?',
+    '1.4': '¿La normativa identifica explícitamente como vulnerables a: embarazadas, menores, personas sin capacidad de consentir, pueblos originarios y personas institucionalizadas?',
+    '2.1': '¿Está permitida la investigación en mujeres embarazadas?',
+    '2.2': '¿Está permitida la investigación en mujeres en período de lactancia?',
+    '2.3': '¿La normativa exige que la investigación en embarazadas/lactantes responda a necesidades de salud específicas de esta población o del feto/lactante?',
+    '2.4': '¿Se requiere evidencia preclínica o de seguridad previa (estudios en animales gestantes, farmacocinética, toxicidad reproductiva) antes de incluir embarazadas?',
+    '2.5': '¿El consentimiento informado debe incluir información específica sobre riesgos maternos, fetales/neonatales y efectos en la lactancia?',
+    '2.6': '¿Se requiere el consentimiento o conocimiento de la pareja/progenitor para la participación de la mujer embarazada?',
+    '2.7': '¿Existen requisitos obligatorios de seguimiento post-parto del recién nacido o de notificación de embarazos que ocurran durante el estudio?',
+    '3.1': '¿Está permitida la investigación en menores de edad?',
+    '3.2': '¿La normativa establece una edad específica que define "menor de edad" para efectos de investigación clínica?',
+    '3.3': '¿La normativa establece categorías diferenciadas por edad (neonatos, lactantes, niños, adolescentes) con requisitos distintos?',
+    '3.4': '¿Se exige que la investigación pediátrica responda a necesidades de salud propias de los menores y no pueda realizarse en adultos?',
+    '3.5': '¿Se requiere el consentimiento de ambos padres/tutores legales, o es suficiente uno solo?',
+    '3.6': '¿Se requiere obtener el asentimiento del menor además del consentimiento de los padres/tutores?',
+    '3.7': '¿La normativa establece que el rechazo o disentimiento del menor es vinculante (puede vetar su participación)?',
+    '4.1': '¿Está permitida la investigación en personas sin capacidad de otorgar consentimiento informado?',
+    '4.2': '¿La normativa define explícitamente qué constituye "incapacidad" para consentir (criterios médicos, judiciales, temporales/permanentes)?',
+    '4.3': '¿Se exige justificar por qué la investigación debe realizarse específicamente en personas sin capacidad y no en personas capaces?',
+    '4.4': '¿La normativa establece una jerarquía de representantes legales autorizados para otorgar el consentimiento sustituto?',
+    '4.5': '¿Se requiere obtener el asentimiento de la persona sin capacidad cuando sea posible evaluar su comprensión parcial?',
+    '4.6': '¿El rechazo o resistencia de la persona sin capacidad es vinculante incluso con consentimiento del representante?',
+    '5.1': '¿Existe normativa específica o sección dedicada a la investigación en pueblos originarios/comunidades indígenas?',
+    '5.2': '¿Se requiere obtener consentimiento libre, previo e informado de la comunidad o autoridad colectiva además del consentimiento individual?',
+    '5.3': '¿La normativa exige adaptaciones culturales y lingüísticas obligatorias en el proceso de consentimiento (traducción a lenguas originarias, uso de intérpretes, formatos orales/visuales)?',
+    '5.4': '¿Existen requisitos específicos sobre retorno de beneficios a la comunidad, uso de muestras biológicas/datos genéticos, o protección del conocimiento tradicional?'
 };
 
-const NO_BOOLEAN_QUESTIONS = ['1.1', '1.2', '1.3', '3.7'];
-
-const RESOURCE_SUBTITLES = {
-    '7.1': { title: 'Normativas Clave de Referencia Rápida', icon: 'scroll-text' },
-    '7.2': { title: 'Formularios Oficiales', icon: 'file-text' },
-    '7.3': { title: 'Guías, Instructivos Oficiales y Web', icon: 'book-open' }
-};
+// Preguntas sin booleano claro (según contexto anterior, asumo pocas o ninguna, pero dejo la lógica preparada)
+const NO_BOOLEAN_QUESTIONS = []; 
 
 // --- APLICACIÓN PRINCIPAL (OBJETO GLOBAL) ---
 
@@ -127,12 +119,27 @@ const app = {
         searchTerm: '',
         comparisonResults: null,
         filteredCountries: null,
-        filterCriteria: []
+        filterCriteria: [],
+        availableCountries: [] // Lista de países que tienen datos en la tabla PV
     },
 
-    init: function() {
+    init: async function() {
+        await this.fetchAvailableCountries();
         this.render();
         this.setupGlobalEvents();
+    },
+
+    fetchAvailableCountries: async function() {
+        // Consultar qué países tienen al menos una entrada en faq_pv_rows
+        const { data, error } = await supabase
+            .from('faq_pv_rows')
+            .select('pais');
+        
+        if (data) {
+            // Extraer nombres únicos
+            const countries = data.map(row => row.pais);
+            this.state.availableCountries = [...new Set(countries)];
+        }
     },
 
     // Navegación
@@ -152,6 +159,9 @@ const app = {
     },
 
     selectCountry: function(countryName) {
+        // Validación adicional por seguridad
+        if (!this.state.availableCountries.includes(countryName)) return;
+
         this.state.selectedCountry = countryName;
         this.setView('country');
     },
@@ -164,13 +174,13 @@ const app = {
         
         // Actualizar estado activo en navegación
         navButtons.forEach(btn => {
-            btn.classList.remove('bg-blue-50', 'text-blue-700', 'ring-1', 'ring-blue-200');
+            btn.classList.remove('bg-blue-50', 'text-slate-700', 'ring-1', 'ring-blue-200');
             btn.classList.add('text-slate-500');
         });
         const activeBtn = document.getElementById(`nav-${this.state.view}`);
         if(activeBtn) {
             activeBtn.classList.remove('text-slate-500');
-            activeBtn.classList.add('bg-blue-50', 'text-blue-700', 'ring-1', 'ring-blue-200');
+            activeBtn.classList.add('bg-blue-50', 'text-slate-700', 'ring-1', 'ring-blue-200');
         }
 
         // Router simple
@@ -195,34 +205,48 @@ const app = {
 
     // VISTA: HOME
     renderHome: function(container) {
-        // SVG del Mapa
+        // SVG del Mapa con Lógica de Disponibilidad
         let mapPathsHtml = '';
         for (const [id, pathData] of Object.entries(MAP_PATHS)) {
             const country = COUNTRIES_LIST.find(c => c.id === id);
             const coords = MAP_COORDS[id];
+            
             if (country && coords) {
+                const isAvailable = this.state.availableCountries.includes(country.name);
+                
+                // Estilos condicionales
+                const fillClass = isAvailable ? 'fill-[#f8fafc]' : 'fill-slate-200';
+                const strokeColor = isAvailable ? '#94a3b8' : '#cbd5e1';
+                const hoverClass = isAvailable 
+                    ? 'hover:fill-teal-500 hover:stroke-teal-700 cursor-pointer' 
+                    : 'cursor-not-allowed';
+                const clickAction = isAvailable ? `onclick="app.selectCountry('${country.name}')"` : '';
+                const tooltipText = isAvailable ? country.name : `${country.name} (En construcción)`;
+                const tooltipBg = isAvailable ? 'rgba(15, 60, 42, 0.9)' : 'rgba(100, 116, 139, 0.9)';
+
                 mapPathsHtml += `
-                <g class="group cursor-pointer" onclick="app.selectCountry('${country.name}')">
-                    <path d="${pathData}" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" class="map-path hover:fill-blue-500 hover:stroke-blue-700"></path>
+                <g class="group" ${clickAction}>
+                    <path d="${pathData}" stroke="${strokeColor}" stroke-width="1" class="map-path ${fillClass} ${hoverClass} transition-colors duration-300"></path>
                     <g class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                        <rect x="${coords.x - (country.name.length * 3.5)}" y="${coords.y - 20}" width="${country.name.length * 7 + 10}" height="20" rx="4" fill="rgba(15, 23, 42, 0.9)"></rect>
-                        <text x="${coords.x}" y="${coords.y - 6}" text-anchor="middle" fill="white" font-size="10" font-weight="bold">${country.name}</text>
+                        <rect x="${coords.x - (tooltipText.length * 3)}" y="${coords.y - 20}" width="${tooltipText.length * 6 + 10}" height="20" rx="4" fill="${tooltipBg}"></rect>
+                        <text x="${coords.x}" y="${coords.y - 6}" text-anchor="middle" fill="white" font-size="10" font-weight="bold">${tooltipText}</text>
                     </g>
                 </g>`;
             }
         }
 
-        // Lógica de renderizado inteligente para no destruir el input al escribir
         const inputExists = document.getElementById('home-search-input');
         
         if (!inputExists) {
-            // Renderizado inicial completo
             container.innerHTML = `
             <div class="animate-in fade-in duration-500">
                 <div class="text-center mb-10 max-w-3xl mx-auto">
                     <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                        Información Regulatoria para Ensayos Clínicos en <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">América Latina y el Caribe</span>
+                        Módulo: <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Poblaciones Vulnerables</span>
                     </h1>
+                    <p class="text-lg text-slate-500 mb-8">
+                        Análisis específico de normativas para investigación en mujeres embarazadas, niños, comunidades indígenas y personas con capacidad disminuida.
+                    </p>
                     
                     <!-- Search Bar -->
                     <div class="max-w-md mx-auto relative group z-20">
@@ -232,8 +256,8 @@ const app = {
                         <input 
                             type="text" 
                             id="home-search-input"
-                            class="block w-full pl-10 pr-4 py-3 border border-slate-200 rounded-full bg-white focus:ring-4 focus:ring-blue-50 focus:border-blue-500 transition-all shadow-sm hover:shadow-md"
-                            placeholder="Buscar país (ej. Argentina, México)..."
+                            class="block w-full pl-10 pr-4 py-3 border border-slate-200 rounded-full bg-white focus:ring-4 focus:ring-teal-50 focus:border-teal-500 transition-all shadow-sm hover:shadow-md"
+                            placeholder="Buscar país (ej. Chile, Colombia)..."
                             value="${this.state.searchTerm}"
                             autocomplete="off"
                         >
@@ -246,10 +270,10 @@ const app = {
 
                 <!-- Map Section -->
                 <div class="mb-12">
-                    <div class="relative w-full max-w-2xl mx-auto h-[500px] md:h-[600px] bg-blue-50/50 rounded-3xl border border-blue-100 shadow-inner overflow-hidden flex items-center justify-center p-4">
-                        <div class="absolute top-4 right-4 bg-white/80 backdrop-blur p-3 rounded-lg border border-blue-100 text-xs text-blue-800 z-10 max-w-xs shadow-sm">
-                            <p class="font-bold mb-1">Mapa Interactivo</p>
-                            <p>Selecciona un país para ver su regulación.</p>
+                    <div class="relative w-full max-w-2xl mx-auto h-[500px] md:h-[600px] bg-teal-50/50 rounded-3xl border border-teal-100 shadow-inner overflow-hidden flex items-center justify-center p-4">
+                        <div class="absolute top-4 right-4 bg-white/80 backdrop-blur p-3 rounded-lg border border-teal-100 text-xs text-teal-800 z-10 max-w-xs shadow-sm">
+                            <p class="font-bold mb-1">Mapa Interactivo (PV)</p>
+                            <p>Selecciona un país para ver normativas de vulnerabilidad. <span class="block text-slate-400 font-normal mt-1">(Gris: Sin datos cargados)</span></p>
                         </div>
                         <svg viewBox="0 0 500 500" class="w-full h-full drop-shadow-xl" style="filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))">
                             ${mapPathsHtml}
@@ -258,7 +282,6 @@ const app = {
                 </div>
             </div>`;
 
-            // Bind Event Listeners
             const input = document.getElementById('home-search-input');
             input.addEventListener('input', (e) => {
                 this.state.searchTerm = e.target.value;
@@ -266,7 +289,6 @@ const app = {
             });
         }
         
-        // Actualizar resultados (dropdown)
         this.updateSearchResults();
     },
 
@@ -282,7 +304,12 @@ const app = {
             return;
         }
 
-        const results = COUNTRIES_LIST.filter(c => c.name.toLowerCase().includes(term));
+        // Filtrar países que coincidan con el término Y que estén disponibles en la BD
+        const results = COUNTRIES_LIST.filter(c => 
+            c.name.toLowerCase().includes(term) && 
+            this.state.availableCountries.includes(c.name)
+        );
+        
         dropdown.classList.remove('hidden');
 
         if (results.length > 0) {
@@ -293,127 +320,88 @@ const app = {
                 </button>
             `).join('');
         } else {
-            dropdown.innerHTML = '<div class="p-4 text-slate-400 text-sm text-center">No se encontraron resultados</div>';
+            dropdown.innerHTML = '<div class="p-4 text-slate-400 text-sm text-center">No se encontraron resultados disponibles.</div>';
         }
     },
 
-    // VISTA: DETALLE PAÍS
+    // VISTA: DETALLE PAÍS (VULNERABLES)
     renderCountryDetail: async function(container) {
         const countryName = this.state.selectedCountry;
         
-        // Estado de carga
         container.innerHTML = `
             <div class="flex justify-center items-center h-96">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
             </div>`;
 
         try {
-            const [faqRes, summaryRes, linksRes] = await Promise.all([
-                supabase.from('faq').select('*').eq('pais', countryName).single(),
-                supabase.from('resumen_ejecutivo').select('*').eq('pais', countryName).single(),
-                supabase.from('enlaces').select('*').eq('pais', countryName).order('question_code')
+            // NOTA: Consulta a 'faq_pv_rows' en lugar de 'faq'
+            const [faqRes, summaryRes] = await Promise.all([
+                supabase.from('faq_pv_rows').select('*').eq('pais', countryName).single(),
+                supabase.from('resumen_ejecutivo').select('*').eq('pais', countryName).single()
             ]);
 
             const faq = faqRes.data;
             const summary = summaryRes.data;
-            const links = linksRes.data || [];
 
             if (!faq || !summary) {
-                container.innerHTML = '<div class="text-center p-10 text-red-500">Datos no disponibles para este país.</div>';
+                container.innerHTML = '<div class="text-center p-10 text-red-500">Datos no disponibles para este país en este módulo.</div>';
                 return;
             }
 
-            // CORRECCIÓN BANDERAS: Buscar en la lista estática por NOMBRE EXACTO
             const countryData = COUNTRIES_LIST.find(c => c.name === countryName);
-            // Usar 'xx' como fallback si no se encuentra
             const flagCode = countryData ? countryData.flagCode : 'xx';
 
-            // Generar HTML de Preguntas
+            // Generar HTML de Preguntas (PV)
             let questionsHtml = '';
             CATEGORIES.forEach(cat => {
+                // Verificar si hay preguntas para esta categoría
+                const catQuestions = Object.entries(QUESTIONS).filter(([key]) => key.startsWith(`${cat.id}.`));
+                if (catQuestions.length === 0) return;
+
                 questionsHtml += `
                 <div id="cat-${cat.id}" class="scroll-mt-24 mb-12">
                     <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3 pb-2 border-b border-slate-200">
-                        <i data-lucide="${cat.id === 7 ? 'link' : 'file-check'}" class="w-6 h-6 text-blue-600"></i>
+                        <i data-lucide="${cat.icon}" class="w-6 h-6 text-teal-600"></i>
                         ${cat.name}
-                    </h3>`;
+                    </h3>
+                    <div class="space-y-6">`;
+                    
+                catQuestions.map(([qId, qText]) => {
+                    // Prefijo 'q_pv_'
+                    const dbKey = `q_pv_${qId.replace(/\./g, '_')}`;
+                    const directAnswer = faq[`${dbKey}_directa`];
+                    const extendedAnswer = faq[`${dbKey}_ampliada`];
+                    const source = faq[`${dbKey}_fuente`];
+                    
+                    const cleanSource = source 
+                        ? source.split('\n').map(line => line.trim()).filter(line => line.length > 0).join('\n') 
+                        : '';
 
-                if (cat.id === 7) {
-                    // SECCIÓN 7: RECURSOS SEGMENTADOS
-                    if (links.length === 0) {
-                        questionsHtml += `<div class="text-slate-500 italic p-4 bg-slate-50 rounded-lg">No hay recursos disponibles.</div>`;
-                    } else {
-                        questionsHtml += `<div class="space-y-8">`;
-                        ['7.1', '7.2', '7.3'].forEach(subCode => {
-                            const subLinks = links.filter(l => l.question_code === subCode);
-                            if (subLinks.length > 0) {
-                                const info = RESOURCE_SUBTITLES[subCode];
-                                questionsHtml += `
-                                <div>
-                                    <h4 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                                        <i data-lucide="${info.icon}" class="w-5 h-5 text-teal-600"></i>
-                                        ${info.title}
-                                    </h4>
-                                    <div class="grid grid-cols-1 gap-4">
-                                        ${subLinks.map(link => `
-                                            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-blue-300 transition-colors">
-                                                <h5 class="font-bold text-blue-700 mb-2">${link.titulo}</h5>
-                                                <p class="text-sm text-slate-600 mb-4">${link.proposito_descripcion || ''}</p>
-                                                <a href="${link.enlace}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-colors">
-                                                    Acceder al Recurso <i data-lucide="external-link" class="w-3 h-3"></i>
-                                                </a>
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>`;
-                            }
-                        });
-                        questionsHtml += `</div>`;
-                    }
-                } else {
-                    // SECCIONES NORMALES (PREGUNTAS)
-                    questionsHtml += `<div class="space-y-6">`;
-                    Object.entries(QUESTIONS)
-                        .filter(([key]) => key.startsWith(`${cat.id}.`))
-                        .map(([qId, qText]) => {
-                            const dbKey = `q_${qId.replace(/\./g, '_')}`;
-                            const directAnswer = faq[`${dbKey}_directa`];
-                            const extendedAnswer = faq[`${dbKey}_ampliada`];
-                            const source = faq[`${dbKey}_fuente`];
-                            
-                            // Limpieza de sangría para "Ver Fuente"
-                            const cleanSource = source 
-                                ? source.split('\n').map(line => line.trim()).filter(line => line.length > 0).join('\n') 
-                                : '';
-
-                            questionsHtml += `
-                            <div class="bg-white rounded-xl border border-slate-200 shadow-sm transition-all overflow-hidden page-break p-6">
-                                <h4 class="font-bold text-slate-800 text-lg mb-4">${qId} - ${qText}</h4>
-                                <div class="mb-4 text-sm text-slate-800 font-medium bg-blue-50/50 p-4 rounded-lg border-l-4 border-blue-500">
-                                    ${directAnswer || "Información no disponible"}
-                                </div>
-                                ${extendedAnswer ? `<div class="mb-4 text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">${extendedAnswer}</div>` : ''}
-                                ${cleanSource ? `
-                                    <div class="mt-4 pt-4 border-t border-slate-100">
-                                        <button onclick="app.toggleSource('source-${qId.replace(/\./g, '-')}')" class="text-xs font-bold text-slate-500 hover:text-blue-600 flex items-center gap-2 transition-colors">
-                                            <i data-lucide="book-open" class="w-3 h-3"></i> Ver Fuente
-                                        </button>
-                                        <div id="source-${qId.replace(/\./g, '-')}" class="hidden mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono whitespace-pre-wrap animate-in fade-in duration-200">${cleanSource}</div>
-                                    </div>` : ''}
-                            </div>`;
-                        });
-                    questionsHtml += `</div>`;
-                }
-                questionsHtml += `</div>`;
+                    questionsHtml += `
+                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm transition-all overflow-hidden page-break p-6">
+                        <h4 class="font-bold text-slate-800 text-lg mb-4">${qId} - ${qText}</h4>
+                        <div class="mb-4 text-sm text-slate-800 font-medium bg-teal-50/50 p-4 rounded-lg border-l-4 border-teal-500">
+                            ${directAnswer || "Información no disponible"}
+                        </div>
+                        ${extendedAnswer ? `<div class="mb-4 text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">${extendedAnswer}</div>` : ''}
+                        ${cleanSource ? `
+                            <div class="mt-4 pt-4 border-t border-slate-100">
+                                <button onclick="app.toggleSource('source-${qId.replace(/\./g, '-')}')" class="text-xs font-bold text-slate-500 hover:text-teal-600 flex items-center gap-2 transition-colors">
+                                    <i data-lucide="book-open" class="w-3 h-3"></i> Ver Fuente
+                                </button>
+                                <div id="source-${qId.replace(/\./g, '-')}" class="hidden mt-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono whitespace-pre-wrap animate-in fade-in duration-200">${cleanSource}</div>
+                            </div>` : ''}
+                    </div>`;
+                });
+                questionsHtml += `</div></div>`;
             });
 
-            // Layout Principal
             container.innerHTML = `
             <div class="animate-in slide-in-from-bottom-4 duration-500 pb-20 relative">
                 <!-- Header -->
                 <div class="mb-8 no-print">
-                    <button onclick="app.setView('home')" class="group flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors text-sm font-medium mb-4">
-                        <div class="p-1 rounded-full bg-white border border-slate-200 group-hover:border-blue-200">
+                    <button onclick="app.setView('home')" class="group flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors text-sm font-medium mb-4">
+                        <div class="p-1 rounded-full bg-white border border-slate-200 group-hover:border-teal-200">
                             <i data-lucide="arrow-left" class="w-4 h-4"></i>
                         </div>
                         Volver
@@ -422,9 +410,12 @@ const app = {
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-slate-200 pb-6">
                         <div class="flex items-center gap-4">
                             <span class="fi fi-${flagCode} text-5xl rounded shadow-sm"></span>
-                            <h2 class="text-4xl font-bold text-slate-900">${summary.pais}</h2>
+                            <div>
+                                <h2 class="text-4xl font-bold text-slate-900">${summary.pais}</h2>
+                                <span class="text-teal-600 font-bold text-sm uppercase tracking-wider">Módulo Poblaciones Vulnerables</span>
+                            </div>
                         </div>
-                        <button onclick="app.printReport('${summary.pais}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-blue-700 shadow-sm transition-all">
+                        <button onclick="app.printReport('${summary.pais}')" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-teal-700 shadow-sm transition-all">
                             <i data-lucide="printer" class="w-4 h-4"></i> Generar Informe PDF
                         </button>
                     </div>
@@ -432,7 +423,7 @@ const app = {
 
                 <!-- Print Header -->
                 <div class="print-only text-center mb-8 border-b pb-4">
-                    <h1 class="text-2xl font-bold text-blue-800">InfoRegLAC - Informe Regulatorio</h1>
+                    <h1 class="text-2xl font-bold text-teal-800">InfoRegLAC - Poblaciones Vulnerables</h1>
                     <h2 class="text-xl text-slate-700">${summary.pais}</h2>
                 </div>
 
@@ -440,15 +431,13 @@ const app = {
                     <!-- Sidebar Sticky -->
                     <div class="lg:col-span-1 space-y-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scrollbar pr-2">
                          <!-- Executive Summary -->
-                        <div class="bg-gradient-to-br from-blue-50 to-slate-50 rounded-2xl p-6 border border-blue-100 shadow-sm">
-                            <h3 class="font-bold text-blue-800 mb-4 flex items-center gap-2">
+                        <div class="bg-gradient-to-br from-teal-50 to-slate-50 rounded-2xl p-6 border border-teal-100 shadow-sm">
+                            <h3 class="font-bold text-teal-800 mb-4 flex items-center gap-2">
                                 <i data-lucide="info" class="w-5 h-5"></i> Resumen Ejecutivo
                             </h3>
                             <div class="space-y-4 text-sm">
                                 <div><strong class="block text-slate-500 text-xs uppercase tracking-wide">Autoridad</strong><span class="text-slate-800 font-medium">${summary.autoridad_regulatoria}</span></div>
-                                <div><strong class="block text-slate-500 text-xs uppercase tracking-wide">Sitio Web</strong><a href="${summary.sitio_web_oficial}" target="_blank" class="text-blue-600 hover:underline break-words">${summary.sitio_web_oficial}</a></div>
-                                <div><strong class="block text-slate-500 text-xs uppercase tracking-wide mb-1">Contacto</strong><div class="flex items-start gap-2 text-slate-700 mb-1"><i data-lucide="mail" class="w-3 h-3 mt-1 text-slate-400"></i><span class="break-all">${summary.correo_contacto}</span></div><div class="flex items-start gap-2 text-slate-700"><i data-lucide="phone" class="w-3 h-3 mt-1 text-slate-400"></i><span>${summary.telefonos}</span></div></div>
-                                <div><strong class="block text-slate-500 text-xs uppercase tracking-wide">Domicilio</strong><div class="flex items-start gap-2 text-slate-700"><i data-lucide="map-pin" class="w-3 h-3 mt-1 text-slate-400"></i><span>${summary.domicilio}</span></div></div>
+                                <div><strong class="block text-slate-500 text-xs uppercase tracking-wide">Sitio Web</strong><a href="${summary.sitio_web_oficial}" target="_blank" class="text-teal-600 hover:underline break-words">${summary.sitio_web_oficial}</a></div>
                             </div>
                         </div>
 
@@ -458,7 +447,7 @@ const app = {
                             <div class="space-y-1">
                                 ${CATEGORIES.map(cat => `
                                     <button onclick="app.scrollToSection(${cat.id})" class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-                                        ${cat.name}
+                                        <i data-lucide="${cat.icon}" class="w-4 h-4 text-slate-400"></i> ${cat.name}
                                     </button>
                                 `).join('')}
                             </div>
@@ -472,12 +461,11 @@ const app = {
                 </div>
 
                 <!-- Floating Scroll Top -->
-                <button id="scroll-top-btn" onclick="app.scrollToTop()" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 z-50 transform hover:scale-110 opacity-0 translate-y-10 pointer-events-none">
+                <button id="scroll-top-btn" onclick="app.scrollToTop()" class="fixed bottom-8 right-8 bg-teal-600 text-white p-3 rounded-full shadow-lg hover:bg-teal-700 transition-all duration-300 z-50 transform hover:scale-110 opacity-0 translate-y-10 pointer-events-none">
                     <i data-lucide="arrow-up" class="w-6 h-6"></i>
                 </button>
             </div>`;
 
-            // Scroll Listener
             window.onscroll = function() {
                 const btn = document.getElementById('scroll-top-btn');
                 if (btn) {
@@ -495,24 +483,24 @@ const app = {
         }
     },
 
-    // VISTA: COMPARADOR
+    // VISTA: COMPARADOR (VULNERABLES)
     renderComparisonTool: function(container) {
         container.innerHTML = `
         <div class="animate-in fade-in pb-20">
-            <button onclick="app.setView('home')" class="mb-6 text-sm text-slate-500 hover:text-blue-600 font-medium flex items-center gap-1">
+            <button onclick="app.setView('home')" class="mb-6 text-sm text-slate-500 hover:text-teal-600 font-medium flex items-center gap-1">
                 <span>&larr;</span> Volver al inicio
             </button>
             
-            <h2 class="text-3xl font-bold text-slate-800 mb-2">Comparador Normativo</h2>
+            <h2 class="text-3xl font-bold text-slate-800 mb-2">Comparador (Poblaciones Vulnerables)</h2>
             <p class="text-slate-500 mb-8">Selecciona un requisito para ver cómo se aplica en cada país.</p>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8 max-w-3xl">
                 <label class="block text-sm font-bold text-slate-700 mb-2">Requisito a comparar</label>
                 <div class="flex gap-4 flex-col sm:flex-row">
                     <div class="relative flex-1">
-                        <select id="compare-select" class="w-full appearance-none bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-3 pr-8">
+                        <select id="compare-select" class="w-full appearance-none bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-3 pr-8">
                             <option value="">Selecciona una pregunta...</option>
-                            ${CATEGORIES.filter(c => c.id !== 7).map(cat => `
+                            ${CATEGORIES.map(cat => `
                                 <optgroup label="${cat.name}">
                                     ${Object.entries(QUESTIONS)
                                         .filter(([k]) => k.startsWith(`${cat.id}.`))
@@ -525,7 +513,7 @@ const app = {
                              <i data-lucide="chevron-down" class="w-4 h-4"></i>
                         </div>
                     </div>
-                    <button onclick="app.executeCompare()" id="compare-btn" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                    <button onclick="app.executeCompare()" id="compare-btn" class="bg-teal-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-teal-700 transition-colors flex items-center justify-center gap-2">
                        <i data-lucide="search" class="w-4 h-4"></i> Comparar 
                     </button>
                 </div>
@@ -546,14 +534,15 @@ const app = {
         btn.innerText = 'Cargando...';
         btn.disabled = true;
 
-        const dbKey = `q_${questionId.replace(/\./g, '_')}`;
+        // Prefijo q_pv_
+        const dbKey = `q_pv_${questionId.replace(/\./g, '_')}`;
         const hasBoolean = !NO_BOOLEAN_QUESTIONS.includes(questionId);
         
         let selectQuery = `pais, ${dbKey}_directa, ${dbKey}_ampliada`;
         if (hasBoolean) selectQuery += `, ${dbKey}_booleano`;
 
         const { data, error } = await supabase
-            .from('faq')
+            .from('faq_pv_rows')
             .select(selectQuery)
             .order('pais');
 
@@ -570,7 +559,7 @@ const app = {
                 return `
                 <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all flex flex-col">
                     <div class="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
-                        <h3 class="font-bold text-lg text-blue-800">${item.pais}</h3>
+                        <h3 class="font-bold text-lg text-teal-800">${item.pais}</h3>
                         ${booleanVal !== undefined ? `
                             <span class="px-2 py-1 rounded text-xs font-bold ${booleanVal ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
                                 ${booleanVal ? 'SÍ' : 'NO'}
@@ -582,7 +571,7 @@ const app = {
                     </p>
                     ${extended ? `
                         <details class="mt-2 text-xs text-slate-500 bg-slate-50 p-2 rounded cursor-pointer">
-                            <summary class="font-bold text-blue-600 hover:text-blue-800 select-none">Ver detalle</summary>
+                            <summary class="font-bold text-teal-600 hover:text-teal-800 select-none">Ver detalle</summary>
                             <div class="mt-2 pt-2 border-t border-slate-200">
                                 ${extended}
                             </div>
@@ -593,25 +582,24 @@ const app = {
         }
     },
 
-    // VISTA: FILTRO
+    // VISTA: FILTRO (VULNERABLES)
     renderFilterTool: function(container) {
-        this.state.filterCriteria = []; // Reset on load
+        this.state.filterCriteria = []; 
         
-        // Generar acordeones de filtros
         let filtersHtml = '';
-        CATEGORIES.filter(c => c.id !== 7).forEach(cat => {
+        CATEGORIES.forEach(cat => {
             const boolQuestions = Object.entries(QUESTIONS).filter(([k]) => k.startsWith(`${cat.id}.`) && !NO_BOOLEAN_QUESTIONS.includes(k));
             if (boolQuestions.length > 0) {
                 filtersHtml += `
                 <details class="group">
                     <summary class="list-none flex justify-between items-center font-medium text-slate-700 cursor-pointer p-2 hover:bg-slate-50 rounded">
-                        <span class="text-sm">${cat.name}</span>
+                        <span class="text-sm flex items-center gap-2"><i data-lucide="${cat.icon}" class="w-3 h-3 text-slate-400"></i> ${cat.name}</span>
                         <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-open:rotate-90 transition-transform"></i>
                     </summary>
                     <div class="pl-2 mt-2 space-y-2 border-l-2 border-slate-100 ml-2">
                         ${boolQuestions.map(([k, v]) => `
-                            <label class="flex items-start gap-3 cursor-pointer p-1 hover:bg-blue-50 rounded">
-                                <input type="checkbox" onchange="app.toggleFilter('${k}')" class="mt-1 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                            <label class="flex items-start gap-3 cursor-pointer p-1 hover:bg-teal-50 rounded">
+                                <input type="checkbox" onchange="app.toggleFilter('${k}')" class="mt-1 rounded border-slate-300 text-teal-600 focus:ring-teal-500">
                                 <span class="text-xs text-slate-600 leading-tight">${k} - ${v}</span>
                             </label>
                         `).join('')}
@@ -622,22 +610,22 @@ const app = {
 
         container.innerHTML = `
         <div class="animate-in fade-in pb-20">
-             <button onclick="app.setView('home')" class="mb-6 text-sm text-slate-500 hover:text-blue-600 font-medium flex items-center gap-1">
+             <button onclick="app.setView('home')" class="mb-6 text-sm text-slate-500 hover:text-teal-600 font-medium flex items-center gap-1">
                 <span>&larr;</span> Volver al inicio
             </button>
 
-            <h2 className="text-3xl font-bold text-slate-800 mb-2">Filtro Avanzado</h2>
-            <p className="text-slate-500 mb-8">Encuentra países que cumplan con criterios regulatorios específicos (Solo preguntas de Sí/No).</p>
+            <h2 className="text-3xl font-bold text-slate-800 mb-2">Filtro Avanzado (PV)</h2>
+            <p className="text-slate-500 mb-8">Encuentra países que cumplan con criterios de vulnerabilidad específicos.</p>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Sidebar -->
-                <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 h-fit max-h-[80vh] overflow-y-auto">
+                <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 h-fit max-h-[80vh] overflow-y-auto custom-scrollbar">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-bold text-slate-800">Criterios</h3>
                         <button onclick="app.renderFilterTool(document.getElementById('app-container'))" class="text-xs text-red-500 font-medium hover:underline">Limpiar</button>
                     </div>
                     <div class="space-y-4">${filtersHtml}</div>
-                    <button onclick="app.executeFilter()" id="filter-btn" class="w-full mt-6 bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <button onclick="app.executeFilter()" id="filter-btn" class="w-full mt-6 bg-teal-600 text-white py-3 rounded-xl font-bold hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                         Buscar Países (0)
                     </button>
                 </div>
@@ -670,9 +658,9 @@ const app = {
         btn.innerText = 'Filtrando...';
         btn.disabled = true;
 
-        let query = supabase.from('faq').select('pais');
+        let query = supabase.from('faq_pv_rows').select('pais');
         this.state.filterCriteria.forEach(criteria => {
-             const dbKey = `q_${criteria.replace(/\./g, '_')}_booleano`;
+             const dbKey = `q_pv_${criteria.replace(/\./g, '_')}_booleano`;
              query = query.eq(dbKey, true);
         });
 
@@ -684,24 +672,24 @@ const app = {
         if (data) {
             const countries = data.map(d => d.pais);
             if (countries.length === 0) {
-                container.innerHTML = `<div class="p-8 bg-amber-50 text-amber-700 rounded-xl border border-amber-200">No se encontraron países que cumplan con todos los criterios seleccionados simultáneamente.</div>`;
+                container.innerHTML = `<div class="p-8 bg-amber-50 text-amber-700 rounded-xl border border-amber-200">No se encontraron países que cumplan con todos los criterios.</div>`;
             } else {
                 container.innerHTML = `
                 <div>
                     <div class="mb-4 flex items-center justify-between">
                         <h3 class="font-bold text-lg text-slate-800">Resultados</h3>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-full">${countries.length} Países encontrados</span>
+                        <span class="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded-full">${countries.length} Países encontrados</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         ${countries.map(name => {
                             const cData = COUNTRIES_LIST.find(c => c.name === name);
                             return `
-                            <div onclick="app.selectCountry('${name}')" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-300 cursor-pointer transition-all group">
+                            <div onclick="app.selectCountry('${name}')" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-teal-300 cursor-pointer transition-all group">
                                 <div class="flex items-center gap-4">
                                     ${cData ? `<span class="fi fi-${cData.flagCode} text-3xl shadow-sm rounded-sm"></span>` : ''}
-                                    <h4 class="font-bold text-lg text-slate-800 group-hover:text-blue-600">${name}</h4>
+                                    <h4 class="font-bold text-lg text-slate-800 group-hover:text-teal-600">${name}</h4>
                                 </div>
-                                <div class="mt-4 flex items-center gap-2 text-xs font-bold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="mt-4 flex items-center gap-2 text-xs font-bold text-teal-600 opacity-0 group-hover:opacity-100 transition-opacity">
                                     Ver ficha completa <i data-lucide="chevron-right" class="w-3 h-3"></i>
                                 </div>
                             </div>`;
@@ -719,7 +707,6 @@ const app = {
         const el = document.getElementById(elementId);
         if (el) {
             el.classList.toggle('hidden');
-            // Cambiar texto botón (simple traverse)
             const btn = el.previousElementSibling;
             if(btn) {
                 const isHidden = el.classList.contains('hidden');
@@ -745,15 +732,15 @@ const app = {
 
     printReport: async function(countryName) {
         try {
-            await supabase.from('descargas_informes').insert({ pais: countryName });
-        } catch (e) {
-            console.error('Error logging print', e);
-        }
+            await supabase.from('descargas_informes').insert({ 
+                pais: countryName, 
+                tipo_informe: 'Poblaciones Vulnerables'
+            });
+        } catch (e) { console.error(e); }
         window.print();
     },
     
     setupGlobalEvents: function() {
-        // Exponer app globalmente para los onclicks del HTML
         window.app = this;
     }
 };

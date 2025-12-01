@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfoRegLAC - Marco General</title>
+    <title>InfoRegLAC - Poblaciones Vulnerables</title>
     
     <!-- 1. Estilos: Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -64,16 +64,16 @@
             <div class="flex justify-between h-16">
                 <!-- Logo & Branding -->
                 <div class="flex items-center gap-3 cursor-pointer group" onclick="app.goHome()">
-                    <div class="w-9 h-9 bg-gradient-to-br from-blue-700 to-teal-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-200 transition-transform group-hover:scale-105">
-                        <i data-lucide="globe-2" class="w-5 h-5"></i>
+                    <div class="w-9 h-9 bg-gradient-to-br from-teal-600 to-emerald-500 rounded-lg flex items-center justify-center text-white shadow-lg shadow-teal-200 transition-transform group-hover:scale-105">
+                        <i data-lucide="users" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <span class="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-800 to-teal-600 tracking-tight">
+                        <span class="text-xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-teal-700 to-emerald-600 tracking-tight">
                             InfoRegLAC
                         </span>
                         <div class="flex items-center gap-2 -mt-1">
-                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider bg-slate-100 px-1.5 rounded">
-                                General
+                            <span class="text-[10px] text-teal-600 font-bold uppercase tracking-wider bg-teal-50 px-1.5 rounded border border-teal-100">
+                                Poblaciones Vulnerables
                             </span>
                         </div>
                     </div>
@@ -82,9 +82,9 @@
                 <!-- Nav Links -->
                 <div class="flex items-center gap-2">
                     <!-- Module Switcher -->
-                    <a href="vulnerables.html" class="mr-4 px-3 py-1.5 rounded-lg text-sm font-bold text-teal-600 bg-teal-50 hover:bg-teal-100 border border-teal-200 transition-all flex items-center gap-2">
-                        <i data-lucide="users" class="w-4 h-4"></i> 
-                        <span class="hidden md:inline">Ir a Poblaciones Vulnerables</span>
+                    <a href="index.html" class="mr-4 px-3 py-1.5 rounded-lg text-sm font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all flex items-center gap-2">
+                        <i data-lucide="globe-2" class="w-4 h-4"></i> 
+                        <span class="hidden md:inline">Ir a Marco General</span>
                     </a>
 
                     <div class="h-6 w-px bg-slate-200 mx-1 hidden sm:block"></div>
@@ -112,8 +112,8 @@
     <footer class="bg-white border-t border-slate-200 py-8 mt-auto no-print">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <div class="flex justify-center items-center gap-2 mb-4 opacity-50">
-                <i data-lucide="globe-2" class="w-4 h-4"></i>
-                <span class="font-bold text-lg">InfoRegLAC</span>
+                <i data-lucide="users" class="w-4 h-4"></i>
+                <span class="font-bold text-lg">InfoRegLAC - PV</span>
             </div>
             <p class="text-slate-400 text-sm max-w-lg mx-auto mb-4">
                 &copy; 2025 InfoRegLAC. El nombre y el logotipo se utilizan únicamente con fines ilustrativos como parte de un prototipo en desarrollo.
@@ -124,9 +124,7 @@
         </div>
     </footer>
 
-    <!-- SCROLL TO TOP BUTTON (Injected via JS) -->
-    
-    <!-- LÓGICA PRINCIPAL (GENERAL) -->
-    <script type="module" src="main.js"></script>
+    <!-- LÓGICA VULNERABLES -->
+    <script type="module" src="main-vulnerables.js"></script>
 </body>
 </html>
