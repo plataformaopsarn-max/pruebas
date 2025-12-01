@@ -273,7 +273,7 @@ const app = {
                     <div class="relative w-full max-w-2xl mx-auto h-[500px] md:h-[600px] bg-teal-50/50 rounded-3xl border border-teal-100 shadow-inner overflow-hidden flex items-center justify-center p-4">
                         <div class="absolute top-4 right-4 bg-white/80 backdrop-blur p-3 rounded-lg border border-teal-100 text-xs text-teal-800 z-10 max-w-xs shadow-sm">
                             <p class="font-bold mb-1">Mapa Interactivo (PV)</p>
-                            <p>Selecciona un país para ver normativas de vulnerabilidad. <span class="block text-slate-400 font-normal mt-1">(Gris: Sin datos cargados)</span></p>
+                            <p>Selecciona un país para ver información normativa (investigación en poblaciones vulnerables). </p>
                         </div>
                         <svg viewBox="0 0 500 500" class="w-full h-full drop-shadow-xl" style="filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))">
                             ${mapPathsHtml}
