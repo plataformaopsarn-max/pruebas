@@ -1,5 +1,3 @@
-
-
 // --- CONFIGURACIÓN Y CONSTANTES (POBLACIONES VULNERABLES) ---
 
 const SUPABASE_URL = 'https://rhbudrqpetrzispcacyw.supabase.co';
@@ -242,10 +240,10 @@ const app = {
             <div class="animate-in fade-in duration-500">
                 <div class="text-center mb-10 max-w-3xl mx-auto">
                     <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                        Módulo: <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Poblaciones Vulnerables</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Investigación en personas y grupos vulnerables</span>
                     </h1>
                     <p class="text-lg text-slate-500 mb-8">
-                        Análisis específico de normativas para investigación en mujeres embarazadas, niños, comunidades indígenas y personas con capacidad disminuida.
+                        Análisis específico de normativas para investigación con mujeres embarazadas, niños, comunidades indígenas y personas con capacidad disminuida.
                     </p>
                     
                     <!-- Search Bar -->
@@ -369,6 +367,7 @@ const app = {
                 catQuestions.map(([qId, qText]) => {
                     // Prefijo 'q_pv_'
                     const dbKey = `q_pv_${qId.replace(/\./g, '_')}`;
+                    const htmlId = `question-${qId.replace(/\./g, '-')}`; // ID normalizado
                     const directAnswer = faq[`${dbKey}_directa`];
                     const extendedAnswer = faq[`${dbKey}_ampliada`];
                     const source = faq[`${dbKey}_fuente`];
@@ -378,7 +377,7 @@ const app = {
                         : '';
 
                     questionsHtml += `
-                    <div class="bg-white rounded-xl border border-slate-200 shadow-sm transition-all overflow-hidden page-break p-6">
+                    <div id="${htmlId}" class="bg-white rounded-xl border border-slate-200 shadow-sm transition-all overflow-hidden page-break p-6 scroll-mt-28">
                         <h4 class="font-bold text-slate-800 text-lg mb-4">${qId} - ${qText}</h4>
                         <div class="mb-4 text-sm text-slate-800 font-medium bg-teal-50/50 p-4 rounded-lg border-l-4 border-teal-500">
                             ${directAnswer || "Información no disponible"}
@@ -428,7 +427,7 @@ const app = {
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-                    <!-- Sidebar Sticky -->
+                    <!-- Sidebar Sticky con Acordeones Desplegables -->
                     <div class="lg:col-span-1 space-y-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scrollbar pr-2">
                          <!-- Executive Summary -->
                         <div class="bg-gradient-to-br from-teal-50 to-slate-50 rounded-2xl p-6 border border-teal-100 shadow-sm">
@@ -443,14 +442,38 @@ const app = {
 
                         <!-- Navigation Menu -->
                         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-2 no-print">
-                            <h3 class="font-bold text-slate-800 px-4 py-3 text-sm">Navegación</h3>
-                            <div class="space-y-1">
-                                ${CATEGORIES.map(cat => `
-                                    <button onclick="app.scrollToSection(${cat.id})" class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-                                        <i data-lucide="${cat.icon}" class="w-4 h-4 text-slate-400"></i> ${cat.name}
-                                    </button>
-                                `).join('')}
-                            </div>
+                            <h3 class="font-bold text-slate-800 px-4 py-3 text-sm border-b border-slate-50 mb-2">Navegación</h3>
+                            
+                            ${CATEGORIES.map(cat => {
+                                // Filtrar preguntas de la categoría
+                                const catQuestions = Object.entries(QUESTIONS).filter(([k]) => k.startsWith(`${cat.id}.`));
+
+                                return `
+                                <details class="group bg-white rounded-lg border border-slate-100 overflow-hidden mb-2 transition-all open:ring-1 open:ring-teal-100 open:shadow-sm">
+                                    <summary class="flex justify-between items-center px-4 py-3 cursor-pointer hover:bg-slate-50 transition-colors list-none text-sm font-bold text-slate-700 select-none">
+                                        <span class="flex items-center gap-2">
+                                            <i data-lucide="${cat.icon}" class="w-4 h-4 text-teal-600"></i>
+                                            ${cat.name}
+                                        </span>
+                                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 group-open:rotate-180"></i>
+                                    </summary>
+                                    
+                                    <div class="bg-slate-50 border-t border-slate-100">
+                                        <!-- Enlace rápido a la sección completa -->
+                                        <button onclick="app.scrollToSection(${cat.id})" class="w-full text-left px-4 py-2 text-xs font-bold text-teal-600 hover:bg-teal-50 hover:underline border-b border-slate-100">
+                                            Ir al inicio de sección
+                                        </button>
+                                        
+                                        <!-- Lista de preguntas desplegadas -->
+                                        ${catQuestions.map(([qId, qText]) => `
+                                            <button onclick="app.scrollToQuestion('${qId}')" class="w-full text-left px-6 py-2 text-xs text-slate-600 hover:text-teal-700 hover:bg-teal-50/50 transition-colors border-b border-slate-100 last:border-0 leading-tight pl-8">
+                                                <span class="font-bold mr-1">${qId}</span> ${qText.length > 50 ? qText.substring(0, 50) + '...' : qText}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                </details>
+                                `;
+                            }).join('')}
                         </div>
                     </div>
 
@@ -723,6 +746,18 @@ const app = {
             const elementPosition = element.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+    },
+
+    // NUEVA FUNCIÓN: Scroll a una pregunta específica (PV)
+    scrollToQuestion: function(qId) {
+        // Normalizamos el ID como lo hicimos en el render
+        const elementId = `question-${qId.replace(/\./g, '-')}`;
+        const element = document.getElementById(elementId);
+        
+        if (element) {
+            // Scroll al elemento con comportamiento suave
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     },
 

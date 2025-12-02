@@ -1,4 +1,3 @@
-
 // --- CONFIGURACIÓN Y CONSTANTES ---
 
 const SUPABASE_URL = 'https://rhbudrqpetrzispcacyw.supabase.co';
@@ -323,9 +322,7 @@ const app = {
                 return;
             }
 
-            // CORRECCIÓN BANDERAS: Buscar en la lista estática por NOMBRE EXACTO
             const countryData = COUNTRIES_LIST.find(c => c.name === countryName);
-            // Usar 'xx' como fallback si no se encuentra
             const flagCode = countryData ? countryData.flagCode : 'xx';
 
             // Generar HTML de Preguntas
@@ -346,10 +343,13 @@ const app = {
                         questionsHtml += `<div class="space-y-8">`;
                         ['7.1', '7.2', '7.3'].forEach(subCode => {
                             const subLinks = links.filter(l => l.question_code === subCode);
+                            const htmlId = `question-${subCode.replace(/\./g, '-')}`; // ID para ancla
+
                             if (subLinks.length > 0) {
                                 const info = RESOURCE_SUBTITLES[subCode];
+                                // Agregamos ID y scroll-margin
                                 questionsHtml += `
-                                <div>
+                                <div id="${htmlId}" class="scroll-mt-28">
                                     <h4 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
                                         <i data-lucide="${info.icon}" class="w-5 h-5 text-teal-600"></i>
                                         ${info.title}
@@ -377,17 +377,18 @@ const app = {
                         .filter(([key]) => key.startsWith(`${cat.id}.`))
                         .map(([qId, qText]) => {
                             const dbKey = `q_${qId.replace(/\./g, '_')}`;
+                            const htmlId = `question-${qId.replace(/\./g, '-')}`; // ID normalizado para el ancla
                             const directAnswer = faq[`${dbKey}_directa`];
                             const extendedAnswer = faq[`${dbKey}_ampliada`];
                             const source = faq[`${dbKey}_fuente`];
                             
-                            // Limpieza de sangría para "Ver Fuente"
                             const cleanSource = source 
                                 ? source.split('\n').map(line => line.trim()).filter(line => line.length > 0).join('\n') 
                                 : '';
 
+                            // Se agrega ID y clase scroll-mt-28 para el offset
                             questionsHtml += `
-                            <div class="bg-white rounded-xl border border-slate-200 shadow-sm transition-all overflow-hidden page-break p-6">
+                            <div id="${htmlId}" class="bg-white rounded-xl border border-slate-200 shadow-sm transition-all overflow-hidden page-break p-6 scroll-mt-28">
                                 <h4 class="font-bold text-slate-800 text-lg mb-4">${qId} - ${qText}</h4>
                                 <div class="mb-4 text-sm text-slate-800 font-medium bg-blue-50/50 p-4 rounded-lg border-l-4 border-blue-500">
                                     ${directAnswer || "Información no disponible"}
@@ -452,16 +453,50 @@ const app = {
                             </div>
                         </div>
 
-                        <!-- Navigation Menu -->
+                        <!-- Navigation Menu con Acordeones Desplegables -->
                         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-2 no-print">
-                            <h3 class="font-bold text-slate-800 px-4 py-3 text-sm">Navegación</h3>
-                            <div class="space-y-1">
-                                ${CATEGORIES.map(cat => `
-                                    <button onclick="app.scrollToSection(${cat.id})" class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-                                        ${cat.name}
-                                    </button>
-                                `).join('')}
-                            </div>
+                            <h3 class="font-bold text-slate-800 px-4 py-3 text-sm border-b border-slate-50 mb-2">Navegación</h3>
+                            
+                            ${CATEGORIES.map(cat => {
+                                // Lógica corregida para el Sidebar
+                                let catQuestions = [];
+                                
+                                if (cat.id === 7) {
+                                    // Para la sección 7, generamos links basados en los subtítulos
+                                    catQuestions = Object.entries(RESOURCE_SUBTITLES).map(([k, v]) => [k, v.title]);
+                                } else {
+                                    // Para las demás, usamos las preguntas estándar
+                                    catQuestions = Object.entries(QUESTIONS).filter(([k]) => k.startsWith(`${cat.id}.`));
+                                }
+                                
+                                return `
+                                <details class="group bg-white rounded-lg border border-slate-100 overflow-hidden mb-2 transition-all open:ring-1 open:ring-blue-100 open:shadow-sm">
+                                    <summary class="flex justify-between items-center px-4 py-3 cursor-pointer hover:bg-slate-50 transition-colors list-none text-sm font-bold text-slate-700 select-none">
+                                        <span class="flex items-center gap-2">
+                                            <i data-lucide="${cat.id === 7 ? 'link' : (cat.icon || 'file-check')}" class="w-4 h-4 text-blue-500"></i>
+                                            ${cat.name}
+                                        </span>
+                                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 group-open:rotate-180"></i>
+                                    </summary>
+                                    
+                                    <div class="bg-slate-50 border-t border-slate-100">
+                                        <!-- Enlace rápido a la sección completa -->
+                                        <button onclick="app.scrollToSection(${cat.id})" class="w-full text-left px-4 py-2 text-xs font-bold text-blue-600 hover:bg-blue-50 hover:underline border-b border-slate-100">
+                                            Ir al inicio de sección
+                                        </button>
+                                        
+                                        <!-- Lista de preguntas -->
+                                        ${catQuestions.map(([qId, qText]) => `
+                                            <button onclick="app.scrollToQuestion('${qId}')" class="w-full text-left px-6 py-2 text-xs text-slate-600 hover:text-blue-700 hover:bg-blue-50/50 transition-colors border-b border-slate-100 last:border-0 leading-tight pl-8">
+                                                <span class="font-bold mr-1">${qId}</span> ${qText.length > 50 ? qText.substring(0, 50) + '...' : qText}
+                                            </button>
+                                        `).join('')}
+                                        
+                                        ${catQuestions.length === 0 ? '<div class="px-4 py-2 text-xs text-slate-400 italic">Sección general</div>' : ''}
+                                    </div>
+                                </details>
+                                `;
+                            }).join('')}
                         </div>
                     </div>
 
@@ -719,7 +754,6 @@ const app = {
         const el = document.getElementById(elementId);
         if (el) {
             el.classList.toggle('hidden');
-            // Cambiar texto botón (simple traverse)
             const btn = el.previousElementSibling;
             if(btn) {
                 const isHidden = el.classList.contains('hidden');
@@ -736,6 +770,18 @@ const app = {
             const elementPosition = element.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+    },
+
+    // NUEVA FUNCIÓN: Scroll a una pregunta específica
+    scrollToQuestion: function(qId) {
+        // Normalizamos el ID como lo hicimos en el render
+        const elementId = `question-${qId.replace(/\./g, '-')}`;
+        const element = document.getElementById(elementId);
+        
+        if (element) {
+            // No necesitamos cálculo manual complicado porque usamos CSS scroll-mt-28 en el elemento
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     },
 
