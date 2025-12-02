@@ -240,7 +240,7 @@ const app = {
             <div class="animate-in fade-in duration-500">
                 <div class="text-center mb-10 max-w-3xl mx-auto">
                     <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Investigación en personas y grupos vulnerables</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Investigación con personas y grupos vulnerables</span>
                     </h1>
                     <p class="text-lg text-slate-500 mb-8">
                         Análisis específico de normativas para investigación con mujeres embarazadas, niños, comunidades indígenas y personas con capacidad disminuida.
@@ -422,7 +422,7 @@ const app = {
 
                 <!-- Print Header -->
                 <div class="print-only text-center mb-8 border-b pb-4">
-                    <h1 class="text-2xl font-bold text-teal-800">InfoRegLAC - Poblaciones Vulnerables</h1>
+                    <h1 class="text-2xl font-bold text-teal-800">InfoRegLAC - Investigación con personas y grupos vulnerables</h1>
                     <h2 class="text-xl text-slate-700">${summary.pais}</h2>
                 </div>
 
