@@ -67,8 +67,8 @@ const COUNTRIES_LIST = [
 // --- CATEGORÍAS ESPECÍFICAS DE VULNERABLES ---
 const CATEGORIES = [
     { id: 1, name: 'Marco regulatorio general', icon: 'scale' },
-    { id: 2, name: 'Investigación en mujeres embarazadas y lactancia', icon: 'baby' },
-    { id: 3, name: 'Investigación en niños, niñas y adolescentes', icon: 'users' },
+    { id: 2, name: 'Investigación con mujeres embarazadas y lactancia', icon: 'baby' },
+    { id: 3, name: 'Investigación con niños, niñas y adolescentes', icon: 'users' },
     { id: 4, name: 'Personas sin capacidad de consentir', icon: 'brain-circuit' },
     { id: 5, name: 'Pueblos originarios o comunidades indígenas', icon: 'tent' }
 ];
@@ -79,27 +79,27 @@ const QUESTIONS = {
     '1.2': '¿La normativa incluye definiciones específicas de "riesgo mínimo" aplicables a poblaciones vulnerables?',
     '1.3': '¿Se requieren aprobaciones o evaluaciones adicionales (más allá de ARN y CEI estándar) para estudios que incluyan poblaciones vulnerables?',
     '1.4': '¿La normativa identifica explícitamente como vulnerables a: embarazadas, menores, personas sin capacidad de consentir, pueblos originarios y personas institucionalizadas?',
-    '2.1': '¿Está permitida la investigación en mujeres embarazadas?',
-    '2.2': '¿Está permitida la investigación en mujeres en período de lactancia?',
-    '2.3': '¿La normativa exige que la investigación en embarazadas/lactantes responda a necesidades de salud específicas de esta población o del feto/lactante?',
+    '2.1': '¿Está permitida la investigación con mujeres embarazadas?',
+    '2.2': '¿Está permitida la investigación con mujeres en período de lactancia?',
+    '2.3': '¿La normativa exige que la investigación con embarazadas/lactantes responda a necesidades de salud específicas de esta población o del feto/lactante?',
     '2.4': '¿Se requiere evidencia preclínica o de seguridad previa (estudios en animales gestantes, farmacocinética, toxicidad reproductiva) antes de incluir embarazadas?',
     '2.5': '¿El consentimiento informado debe incluir información específica sobre riesgos maternos, fetales/neonatales y efectos en la lactancia?',
     '2.6': '¿Se requiere el consentimiento o conocimiento de la pareja/progenitor para la participación de la mujer embarazada?',
     '2.7': '¿Existen requisitos obligatorios de seguimiento post-parto del recién nacido o de notificación de embarazos que ocurran durante el estudio?',
-    '3.1': '¿Está permitida la investigación en menores de edad?',
+    '3.1': '¿Está permitida la investigación con menores de edad?',
     '3.2': '¿La normativa establece una edad específica que define "menor de edad" para efectos de investigación clínica?',
     '3.3': '¿La normativa establece categorías diferenciadas por edad (neonatos, lactantes, niños, adolescentes) con requisitos distintos?',
     '3.4': '¿Se exige que la investigación pediátrica responda a necesidades de salud propias de los menores y no pueda realizarse en adultos?',
     '3.5': '¿Se requiere el consentimiento de ambos padres/tutores legales?',
     '3.6': '¿Se requiere obtener el asentimiento del menor además del consentimiento de los padres/tutores?',
     '3.7': '¿La normativa establece que el rechazo o disentimiento del menor es vinculante (puede vetar su participación)?',
-    '4.1': '¿Está permitida la investigación en personas sin capacidad de otorgar consentimiento informado?',
+    '4.1': '¿Está permitida la investigación con personas sin capacidad de otorgar consentimiento informado?',
     '4.2': '¿La normativa define explícitamente qué constituye "incapacidad" para consentir (criterios médicos, judiciales, temporales/permanentes)?',
-    '4.3': '¿Se exige justificar por qué la investigación debe realizarse específicamente en personas sin capacidad y no en personas capaces?',
+    '4.3': '¿Se exige justificar por qué la investigación debe realizarse específicamente con personas sin capacidad y no con personas capaces?',
     '4.4': '¿La normativa establece una jerarquía de representantes legales autorizados para otorgar el consentimiento sustituto?',
     '4.5': '¿Se requiere obtener el asentimiento de la persona sin capacidad cuando sea posible evaluar su comprensión parcial?',
     '4.6': '¿El rechazo o resistencia de la persona sin capacidad es vinculante incluso con consentimiento del representante?',
-    '5.1': '¿Existe normativa específica o sección dedicada a la investigación en pueblos originarios/comunidades indígenas?',
+    '5.1': '¿Existe normativa específica o sección dedicada a la investigación con pueblos originarios/comunidades indígenas?',
     '5.2': '¿Se requiere obtener consentimiento libre, previo e informado de la comunidad o autoridad colectiva además del consentimiento individual?',
     '5.3': '¿La normativa exige adaptaciones culturales y lingüísticas obligatorias en el proceso de consentimiento (traducción a lenguas originarias, uso de intérpretes, formatos orales/visuales)?',
     '5.4': '¿Existen requisitos específicos sobre retorno de beneficios a la comunidad, uso de muestras biológicas/datos genéticos, o protección del conocimiento tradicional?'
@@ -271,7 +271,7 @@ const app = {
                     <div class="relative w-full max-w-2xl mx-auto h-[500px] md:h-[600px] bg-teal-50/50 rounded-3xl border border-teal-100 shadow-inner overflow-hidden flex items-center justify-center p-4">
                         <div class="absolute top-4 right-4 bg-white/80 backdrop-blur p-3 rounded-lg border border-teal-100 text-xs text-teal-800 z-10 max-w-xs shadow-sm">
                             <p class="font-bold mb-1">Mapa Interactivo (PV)</p>
-                            <p>Selecciona un país para ver información normativa (investigación en poblaciones vulnerables). </p>
+                            <p>Selecciona un país para ver información normativa (investigación con personas y grupos vulnerables). </p>
                         </div>
                         <svg viewBox="0 0 500 500" class="w-full h-full drop-shadow-xl" style="filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))">
                             ${mapPathsHtml}
@@ -411,7 +411,7 @@ const app = {
                             <span class="fi fi-${flagCode} text-5xl rounded shadow-sm"></span>
                             <div>
                                 <h2 class="text-4xl font-bold text-slate-900">${summary.pais}</h2>
-                                <span class="text-teal-600 font-bold text-sm uppercase tracking-wider">Módulo Poblaciones Vulnerables</span>
+                                <span class="text-teal-600 font-bold text-sm uppercase tracking-wider">Módulo Investigación con personas y grupos vulnerables</span>
                             </div>
                         </div>
                         <button onclick="app.printReport('${summary.pais}')" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-teal-700 shadow-sm transition-all">
@@ -514,7 +514,7 @@ const app = {
                 <span>&larr;</span> Volver al inicio
             </button>
             
-            <h2 class="text-3xl font-bold text-slate-800 mb-2">Comparador (Poblaciones Vulnerables)</h2>
+            <h2 class="text-3xl font-bold text-slate-800 mb-2">Comparador (Personas y grupos vulnerables)</h2>
             <p class="text-slate-500 mb-8">Selecciona un requisito para ver cómo se aplica en cada país.</p>
 
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8 max-w-3xl">
@@ -769,7 +769,7 @@ const app = {
         try {
             await supabase.from('descargas_informes').insert({ 
                 pais: countryName, 
-                tipo_informe: 'Poblaciones Vulnerables'
+                tipo_informe: 'Personas y grupos vulnerables'
             });
         } catch (e) { console.error(e); }
         window.print();
