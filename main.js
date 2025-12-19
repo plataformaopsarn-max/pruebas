@@ -121,7 +121,7 @@ const RESOURCE_SUBTITLES = {
 
 const app = {
     state: {
-        view: 'home', // 'home', 'country', 'compare', 'filter'
+        view: 'home', 
         selectedCountry: null,
         searchTerm: '',
         comparisonResults: null,
@@ -155,13 +155,38 @@ const app = {
         this.setView('country');
     },
 
+    // UTILIDAD: Linkificación inteligente (Solo para el campo Fuente)
+    linkifyText: function(text, links) {
+        if (!text || !links || links.length === 0) return text;
+
+        const sortedLinks = [...links].sort((a, b) => {
+            const titleA = a.titulo || '';
+            const titleB = b.titulo || '';
+            return titleB.length - titleA.length;
+        });
+
+        let linkedText = text;
+
+        sortedLinks.forEach(link => {
+            if (link.titulo && link.enlace) {
+                const escapedTitle = link.titulo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(escapedTitle, 'gi');
+
+                linkedText = linkedText.replace(regex, (match) => {
+                    return `<a href="${link.enlace}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-semibold hover:text-blue-800" title="Ver normativa oficial">${match}</a>`;
+                });
+            }
+        });
+
+        return linkedText;
+    },
+
     // --- RENDERIZADORES ---
 
     render: function() {
         const container = document.getElementById('app-container');
         const navButtons = document.querySelectorAll('nav button');
         
-        // Actualizar estado activo en navegación
         navButtons.forEach(btn => {
             btn.classList.remove('bg-blue-50', 'text-blue-700', 'ring-1', 'ring-blue-200');
             btn.classList.add('text-slate-500');
@@ -172,7 +197,6 @@ const app = {
             activeBtn.classList.add('bg-blue-50', 'text-blue-700', 'ring-1', 'ring-blue-200');
         }
 
-        // Router simple
         switch(this.state.view) {
             case 'home':
                 this.renderHome(container);
@@ -188,13 +212,11 @@ const app = {
                 break;
         }
         
-        // Inicializar iconos
         lucide.createIcons();
     },
 
     // VISTA: HOME
     renderHome: function(container) {
-        // SVG del Mapa
         let mapPathsHtml = '';
         for (const [id, pathData] of Object.entries(MAP_PATHS)) {
             const country = COUNTRIES_LIST.find(c => c.id === id);
@@ -211,11 +233,9 @@ const app = {
             }
         }
 
-        // Lógica de renderizado inteligente para no destruir el input al escribir
         const inputExists = document.getElementById('home-search-input');
         
         if (!inputExists) {
-            // Renderizado inicial completo
             container.innerHTML = `
             <div class="animate-in fade-in duration-500">
                 <div class="text-center mb-10 max-w-3xl mx-auto">
@@ -223,7 +243,6 @@ const app = {
                         Información Regulatoria para Ensayos Clínicos en <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">América Latina y el Caribe</span>
                     </h1>
                     
-                    <!-- Search Bar -->
                     <div class="max-w-md mx-auto relative group z-20">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i data-lucide="search" class="h-5 w-5 text-slate-400"></i>
@@ -236,28 +255,20 @@ const app = {
                             value="${this.state.searchTerm}"
                             autocomplete="off"
                         >
-                        <!-- Dropdown Results Container -->
                         <div id="search-results-dropdown" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-30 hidden">
-                            <!-- Inyectado dinámicamente -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Map Section -->
                 <div class="mb-12">
                     <div class="relative w-full max-w-2xl mx-auto h-[500px] md:h-[600px] bg-blue-50/50 rounded-3xl border border-blue-100 shadow-inner overflow-hidden flex items-center justify-center p-4">
-                        <div class="absolute top-4 right-4 bg-white/80 backdrop-blur p-3 rounded-lg border border-blue-100 text-xs text-blue-800 z-10 max-w-xs shadow-sm">
-                            <p class="font-bold mb-1">Mapa Interactivo</p>
-                            <p>Selecciona un país para ver su regulación.</p>
-                        </div>
-                        <svg viewBox="0 0 500 500" class="w-full h-full drop-shadow-xl" style="filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))">
+                        <svg viewBox="0 0 500 500" class="w-full h-full drop-shadow-xl">
                             ${mapPathsHtml}
                         </svg>
                     </div>
                 </div>
             </div>`;
 
-            // Bind Event Listeners
             const input = document.getElementById('home-search-input');
             input.addEventListener('input', (e) => {
                 this.state.searchTerm = e.target.value;
@@ -265,7 +276,6 @@ const app = {
             });
         }
         
-        // Actualizar resultados (dropdown)
         this.updateSearchResults();
     },
 
@@ -300,15 +310,15 @@ const app = {
     renderCountryDetail: async function(container) {
         const countryName = this.state.selectedCountry;
         
-        // Estado de carga
         container.innerHTML = `
             <div class="flex justify-center items-center h-96">
                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>`;
 
         try {
+            // USAR TABLA faq_rows_corregido
             const [faqRes, summaryRes, linksRes] = await Promise.all([
-                supabase.from('faq').select('*').eq('pais', countryName).single(),
+                supabase.from('faq_rows_corregido').select('*').eq('pais', countryName).limit(1).single(),
                 supabase.from('resumen_ejecutivo').select('*').eq('pais', countryName).single(),
                 supabase.from('enlaces').select('*').eq('pais', countryName).order('question_code')
             ]);
@@ -336,18 +346,17 @@ const app = {
                     </h3>`;
 
                 if (cat.id === 7) {
-                    // SECCIÓN 7: RECURSOS SEGMENTADOS
+                    // SECCIÓN 7: RECURSOS
                     if (links.length === 0) {
                         questionsHtml += `<div class="text-slate-500 italic p-4 bg-slate-50 rounded-lg">No hay recursos disponibles.</div>`;
                     } else {
                         questionsHtml += `<div class="space-y-8">`;
                         ['7.1', '7.2', '7.3'].forEach(subCode => {
                             const subLinks = links.filter(l => l.question_code === subCode);
-                            const htmlId = `question-${subCode.replace(/\./g, '-')}`; // ID para ancla
+                            const htmlId = `question-${subCode.replace(/\./g, '-')}`;
 
                             if (subLinks.length > 0) {
                                 const info = RESOURCE_SUBTITLES[subCode];
-                                // Agregamos ID y scroll-margin
                                 questionsHtml += `
                                 <div id="${htmlId}" class="scroll-mt-28">
                                     <h4 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
@@ -371,24 +380,24 @@ const app = {
                         questionsHtml += `</div>`;
                     }
                 } else {
-                    // SECCIONES NORMALES (PREGUNTAS)
+                    // SECCIONES PREGUNTAS
                     questionsHtml += `<div class="space-y-6">`;
                     Object.entries(QUESTIONS)
                         .filter(([key]) => key.startsWith(`${cat.id}.`))
                         .map(([qId, qText]) => {
                             const dbKey = `q_${qId.replace(/\./g, '_')}`;
-                            const htmlId = `question-${qId.replace(/\./g, '-')}`; // ID normalizado para el ancla
+                            const htmlId = `question-${qId.replace(/\./g, '-')}`;
+                            
+                            // TEXTOS ORIGINALES (Sin procesar para Directa y Ampliada)
                             const directAnswer = faq[`${dbKey}_directa`];
                             const extendedAnswer = faq[`${dbKey}_ampliada`];
-                            const source = faq[`${dbKey}_fuente`];
                             
-                            const cleanSource = source 
-                                ? source.split('\n').map(line => line.trim()).filter(line => line.length > 0).join('\n') 
-                                : '';
+                            // PROCESAMIENTO SOLO PARA LA FUENTE
+                            const rawSource = faq[`${dbKey}_fuente`];
+                            const cleanSource = rawSource ? this.linkifyText(rawSource, links) : '';
 
-                            // Se agrega ID y clase scroll-mt-28 para el offset
                             questionsHtml += `
-                            <div id="${htmlId}" class="bg-white rounded-xl border border-slate-200 shadow-sm transition-all overflow-hidden page-break p-6 scroll-mt-28">
+                            <div id="${htmlId}" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 scroll-mt-28">
                                 <h4 class="font-bold text-slate-800 text-lg mb-4">${qId} - ${qText}</h4>
                                 <div class="mb-4 text-sm text-slate-800 font-medium bg-blue-50/50 p-4 rounded-lg border-l-4 border-blue-500">
                                     ${directAnswer || "Información no disponible"}
@@ -408,10 +417,9 @@ const app = {
                 questionsHtml += `</div>`;
             });
 
-            // Layout Principal
+            // Layout
             container.innerHTML = `
             <div class="animate-in slide-in-from-bottom-4 duration-500 pb-20 relative">
-                <!-- Header -->
                 <div class="mb-8 no-print">
                     <button onclick="app.setView('home')" class="group flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors text-sm font-medium mb-4">
                         <div class="p-1 rounded-full bg-white border border-slate-200 group-hover:border-blue-200">
@@ -431,44 +439,25 @@ const app = {
                     </div>
                 </div>
 
-                <!-- Print Header -->
-                <div class="print-only text-center mb-8 border-b pb-4">
-                    <h1 class="text-2xl font-bold text-blue-800">InfoRegLAC - Informe Regulatorio</h1>
-                    <h2 class="text-xl text-slate-700">${summary.pais}</h2>
-                </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-                    <!-- Sidebar Sticky -->
+                    <!-- Sidebar Navigation -->
                     <div class="lg:col-span-1 space-y-6 lg:sticky lg:top-24 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto custom-scrollbar pr-2">
-                         <!-- Executive Summary -->
-                        <div class="bg-gradient-to-br from-blue-50 to-slate-50 rounded-2xl p-6 border border-blue-100 shadow-sm">
+                         <div class="bg-gradient-to-br from-blue-50 to-slate-50 rounded-2xl p-6 border border-blue-100 shadow-sm">
                             <h3 class="font-bold text-blue-800 mb-4 flex items-center gap-2">
                                 <i data-lucide="info" class="w-5 h-5"></i> Resumen Ejecutivo
                             </h3>
                             <div class="space-y-4 text-sm">
                                 <div><strong class="block text-slate-500 text-xs uppercase tracking-wide">Autoridad</strong><span class="text-slate-800 font-medium">${summary.autoridad_regulatoria}</span></div>
                                 <div><strong class="block text-slate-500 text-xs uppercase tracking-wide">Sitio Web</strong><a href="${summary.sitio_web_oficial}" target="_blank" class="text-blue-600 hover:underline break-words">${summary.sitio_web_oficial}</a></div>
-                                <div><strong class="block text-slate-500 text-xs uppercase tracking-wide mb-1">Contacto</strong><div class="flex items-start gap-2 text-slate-700 mb-1"><i data-lucide="mail" class="w-3 h-3 mt-1 text-slate-400"></i><span class="break-all">${summary.correo_contacto}</span></div><div class="flex items-start gap-2 text-slate-700"><i data-lucide="phone" class="w-3 h-3 mt-1 text-slate-400"></i><span>${summary.telefonos}</span></div></div>
+                                <div><strong class="block text-slate-500 text-xs uppercase tracking-wide mb-1">Contacto</strong><div class="flex items-start gap-2 text-slate-700 mb-1"><i data-lucide="mail" class="w-3 h-3 mt-1 text-slate-400"></i><span class="break-all">${summary.correo_contacto}</span></div></div>
                                 <div><strong class="block text-slate-500 text-xs uppercase tracking-wide">Domicilio</strong><div class="flex items-start gap-2 text-slate-700"><i data-lucide="map-pin" class="w-3 h-3 mt-1 text-slate-400"></i><span>${summary.domicilio}</span></div></div>
                             </div>
                         </div>
 
-                        <!-- Navigation Menu con Acordeones Desplegables -->
                         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-2 no-print">
                             <h3 class="font-bold text-slate-800 px-4 py-3 text-sm border-b border-slate-50 mb-2">Navegación</h3>
-                            
                             ${CATEGORIES.map(cat => {
-                                // Lógica corregida para el Sidebar
-                                let catQuestions = [];
-                                
-                                if (cat.id === 7) {
-                                    // Para la sección 7, generamos links basados en los subtítulos
-                                    catQuestions = Object.entries(RESOURCE_SUBTITLES).map(([k, v]) => [k, v.title]);
-                                } else {
-                                    // Para las demás, usamos las preguntas estándar
-                                    catQuestions = Object.entries(QUESTIONS).filter(([k]) => k.startsWith(`${cat.id}.`));
-                                }
-                                
+                                let catQuestions = (cat.id === 7) ? Object.entries(RESOURCE_SUBTITLES).map(([k, v]) => [k, v.title]) : Object.entries(QUESTIONS).filter(([k]) => k.startsWith(`${cat.id}.`));
                                 return `
                                 <details class="group bg-white rounded-lg border border-slate-100 overflow-hidden mb-2 transition-all open:ring-1 open:ring-blue-100 open:shadow-sm">
                                     <summary class="flex justify-between items-center px-4 py-3 cursor-pointer hover:bg-slate-50 transition-colors list-none text-sm font-bold text-slate-700 select-none">
@@ -478,52 +467,29 @@ const app = {
                                         </span>
                                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 transition-transform duration-200 group-open:rotate-180"></i>
                                     </summary>
-                                    
                                     <div class="bg-slate-50 border-t border-slate-100">
-                                        <!-- Enlace rápido a la sección completa -->
-                                        <button onclick="app.scrollToSection(${cat.id})" class="w-full text-left px-4 py-2 text-xs font-bold text-blue-600 hover:bg-blue-50 hover:underline border-b border-slate-100">
-                                            Ir al inicio de sección
-                                        </button>
+                                        <button onclick="app.scrollToSection(${cat.id})" class="w-full text-left px-4 py-2 text-xs font-bold text-blue-600 hover:bg-blue-50 hover:underline border-b border-slate-100">Ir al inicio de sección</button>
                                         
-                                        <!-- Lista de preguntas -->
+                                        <!-- LISTA DE PREGUNTAS (MOSTRANDO TEXTO COMPLETO) -->
                                         ${catQuestions.map(([qId, qText]) => `
-                                            <button onclick="app.scrollToQuestion('${qId}')" class="w-full text-left px-6 py-2 text-xs text-slate-600 hover:text-blue-700 hover:bg-blue-50/50 transition-colors border-b border-slate-100 last:border-0 leading-tight pl-8">
-                                                <span class="font-bold mr-1">${qId}</span> ${qText.length > 50 ? qText.substring(0, 50) + '...' : qText}
+                                            <button onclick="app.scrollToQuestion('${qId}')" class="w-full text-left px-6 py-3 text-xs text-slate-600 hover:text-blue-700 hover:bg-blue-50/50 transition-colors border-b border-slate-100 last:border-0 leading-normal pl-8">
+                                                <span class="font-bold mr-1 text-blue-500">${qId}</span> ${qText}
                                             </button>
                                         `).join('')}
-                                        
-                                        ${catQuestions.length === 0 ? '<div class="px-4 py-2 text-xs text-slate-400 italic">Sección general</div>' : ''}
                                     </div>
-                                </details>
-                                `;
+                                </details>`;
                             }).join('')}
                         </div>
                     </div>
 
-                    <!-- Main Content -->
                     <div class="lg:col-span-3 space-y-12">
                         ${questionsHtml}
                     </div>
                 </div>
-
-                <!-- Floating Scroll Top -->
                 <button id="scroll-top-btn" onclick="app.scrollToTop()" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 z-50 transform hover:scale-110 opacity-0 translate-y-10 pointer-events-none">
                     <i data-lucide="arrow-up" class="w-6 h-6"></i>
                 </button>
             </div>`;
-
-            // Scroll Listener
-            window.onscroll = function() {
-                const btn = document.getElementById('scroll-top-btn');
-                if (btn) {
-                    if (window.scrollY > 400) {
-                        btn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-                    } else {
-                        btn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-                    }
-                }
-            };
-
         } catch (error) {
             console.error(error);
             container.innerHTML = `<div class="text-red-500 text-center">Error cargando datos: ${error.message}</div>`;
@@ -537,7 +503,6 @@ const app = {
             <button onclick="app.setView('home')" class="mb-6 text-sm text-slate-500 hover:text-blue-600 font-medium flex items-center gap-1">
                 <span>&larr;</span> Volver al inicio
             </button>
-            
             <h2 class="text-3xl font-bold text-slate-800 mb-2">Comparador Normativo</h2>
             <p class="text-slate-500 mb-8">Selecciona un requisito para ver cómo se aplica en cada país.</p>
 
@@ -587,10 +552,8 @@ const app = {
         let selectQuery = `pais, ${dbKey}_directa, ${dbKey}_ampliada`;
         if (hasBoolean) selectQuery += `, ${dbKey}_booleano`;
 
-        const { data, error } = await supabase
-            .from('faq')
-            .select(selectQuery)
-            .order('pais');
+        // USAR faq_rows_corregido
+        const { data, error } = await supabase.from('faq_rows_corregido').select(selectQuery).order('pais');
 
         btn.innerHTML = `<i data-lucide="search" class="w-4 h-4"></i> Comparar`;
         btn.disabled = false;
@@ -603,8 +566,8 @@ const app = {
                 const booleanVal = item[`${dbKey}_booleano`];
 
                 return `
-                <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all flex flex-col">
-                    <div class="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
+                <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col">
+                    <div class="flex justify-between items-start mb-4 border-b pb-3">
                         <h3 class="font-bold text-lg text-blue-800">${item.pais}</h3>
                         ${booleanVal !== undefined ? `
                             <span class="px-2 py-1 rounded text-xs font-bold ${booleanVal ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
@@ -618,9 +581,7 @@ const app = {
                     ${extended ? `
                         <details class="mt-2 text-xs text-slate-500 bg-slate-50 p-2 rounded cursor-pointer">
                             <summary class="font-bold text-blue-600 hover:text-blue-800 select-none">Ver detalle</summary>
-                            <div class="mt-2 pt-2 border-t border-slate-200">
-                                ${extended}
-                            </div>
+                            <div class="mt-2 pt-2 border-t border-slate-200">${extended}</div>
                         </details>
                     ` : ''}
                 </div>`;
@@ -630,9 +591,7 @@ const app = {
 
     // VISTA: FILTRO
     renderFilterTool: function(container) {
-        this.state.filterCriteria = []; // Reset on load
-        
-        // Generar acordeones de filtros
+        this.state.filterCriteria = [];
         let filtersHtml = '';
         CATEGORIES.filter(c => c.id !== 7).forEach(cat => {
             const boolQuestions = Object.entries(QUESTIONS).filter(([k]) => k.startsWith(`${cat.id}.`) && !NO_BOOLEAN_QUESTIONS.includes(k));
@@ -643,10 +602,10 @@ const app = {
                         <span class="text-sm">${cat.name}</span>
                         <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-open:rotate-90 transition-transform"></i>
                     </summary>
-                    <div class="pl-2 mt-2 space-y-2 border-l-2 border-slate-100 ml-2">
+                    <div class="pl-2 mt-2 space-y-2 border-l-2 ml-2">
                         ${boolQuestions.map(([k, v]) => `
                             <label class="flex items-start gap-3 cursor-pointer p-1 hover:bg-blue-50 rounded">
-                                <input type="checkbox" onchange="app.toggleFilter('${k}')" class="mt-1 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                <input type="checkbox" onchange="app.toggleFilter('${k}')" class="mt-1 rounded border-slate-300 text-blue-600">
                                 <span class="text-xs text-slate-600 leading-tight">${k} - ${v}</span>
                             </label>
                         `).join('')}
@@ -660,28 +619,17 @@ const app = {
              <button onclick="app.setView('home')" class="mb-6 text-sm text-slate-500 hover:text-blue-600 font-medium flex items-center gap-1">
                 <span>&larr;</span> Volver al inicio
             </button>
-
-            <h2 className="text-3xl font-bold text-slate-800 mb-2">Filtro Avanzado</h2>
-            <p className="text-slate-500 mb-8">Encuentra países que cumplan con criterios regulatorios específicos (Solo preguntas de Sí/No).</p>
-
+            <h2 class="text-3xl font-bold text-slate-800 mb-8">Filtro Avanzado</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Sidebar -->
-                <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 h-fit max-h-[80vh] overflow-y-auto">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-bold text-slate-800">Criterios</h3>
-                        <button onclick="app.renderFilterTool(document.getElementById('app-container'))" class="text-xs text-red-500 font-medium hover:underline">Limpiar</button>
-                    </div>
+                <div class="lg:col-span-1 bg-white rounded-2xl border p-6 h-fit max-h-[80vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-4"><h3 class="font-bold">Criterios</h3></div>
                     <div class="space-y-4">${filtersHtml}</div>
-                    <button onclick="app.executeFilter()" id="filter-btn" class="w-full mt-6 bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                        Buscar Países (0)
-                    </button>
+                    <button onclick="app.executeFilter()" id="filter-btn" class="w-full mt-6 bg-blue-600 text-white py-3 rounded-xl font-bold disabled:opacity-50" disabled>Buscar Países (0)</button>
                 </div>
-
-                <!-- Results -->
                 <div id="filter-results" class="lg:col-span-2">
-                    <div class="h-full flex flex-col items-center justify-center text-center p-12 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400">
-                        <i data-lucide="filter" class="w-12 h-12 mb-4 opacity-50"></i>
-                        <p>Selecciona criterios a la izquierda para ver resultados.</p>
+                    <div class="h-full flex flex-col items-center justify-center text-center p-12 bg-slate-50 rounded-2xl border-2 border-dashed text-slate-400">
+                        <i data-lucide="filter" class="w-12 h-12 mb-4"></i>
+                        <p>Selecciona criterios a la izquierda.</p>
                     </div>
                 </div>
             </div>
@@ -692,7 +640,6 @@ const app = {
         const idx = this.state.filterCriteria.indexOf(qId);
         if (idx > -1) this.state.filterCriteria.splice(idx, 1);
         else this.state.filterCriteria.push(qId);
-        
         const btn = document.getElementById('filter-btn');
         btn.innerText = `Buscar Países (${this.state.filterCriteria.length})`;
         btn.disabled = this.state.filterCriteria.length === 0;
@@ -701,54 +648,33 @@ const app = {
     executeFilter: async function() {
         const btn = document.getElementById('filter-btn');
         const container = document.getElementById('filter-results');
-        
-        btn.innerText = 'Filtrando...';
+        btn.innerText = 'Cargando...';
         btn.disabled = true;
 
-        let query = supabase.from('faq').select('pais');
+        // USAR faq_rows_corregido
+        let query = supabase.from('faq_rows_corregido').select('pais');
         this.state.filterCriteria.forEach(criteria => {
              const dbKey = `q_${criteria.replace(/\./g, '_')}_booleano`;
              query = query.eq(dbKey, true);
         });
 
         const { data, error } = await query;
-        
         btn.innerText = `Buscar Países (${this.state.filterCriteria.length})`;
         btn.disabled = false;
 
         if (data) {
             const countries = data.map(d => d.pais);
             if (countries.length === 0) {
-                container.innerHTML = `<div class="p-8 bg-amber-50 text-amber-700 rounded-xl border border-amber-200">No se encontraron países que cumplan con todos los criterios seleccionados simultáneamente.</div>`;
+                container.innerHTML = `<div class="p-8 bg-amber-50 text-amber-700 rounded-xl border">No hay resultados que cumplan todos los requisitos.</div>`;
             } else {
-                container.innerHTML = `
-                <div>
-                    <div class="mb-4 flex items-center justify-between">
-                        <h3 class="font-bold text-lg text-slate-800">Resultados</h3>
-                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-full">${countries.length} Países encontrados</span>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        ${countries.map(name => {
-                            const cData = COUNTRIES_LIST.find(c => c.name === name);
-                            return `
-                            <div onclick="app.selectCountry('${name}')" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-300 cursor-pointer transition-all group">
-                                <div class="flex items-center gap-4">
-                                    ${cData ? `<span class="fi fi-${cData.flagCode} text-3xl shadow-sm rounded-sm"></span>` : ''}
-                                    <h4 class="font-bold text-lg text-slate-800 group-hover:text-blue-600">${name}</h4>
-                                </div>
-                                <div class="mt-4 flex items-center gap-2 text-xs font-bold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Ver ficha completa <i data-lucide="chevron-right" class="w-3 h-3"></i>
-                                </div>
-                            </div>`;
-                        }).join('')}
-                    </div>
-                </div>`;
+                container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">${countries.map(name => {
+                    const cData = COUNTRIES_LIST.find(c => c.name === name);
+                    return `<div onclick="app.selectCountry('${name}')" class="bg-white p-6 rounded-xl border hover:shadow-lg cursor-pointer transition-all"><div class="flex items-center gap-4"><span class="fi fi-${cData?.flagCode}"></span><h4 class="font-bold">${name}</h4></div></div>`;
+                }).join('')}</div>`;
                 lucide.createIcons();
             }
         }
     },
-
-    // --- UTILIDADES ---
 
     toggleSource: function(elementId) {
         const el = document.getElementById(elementId);
@@ -773,14 +699,10 @@ const app = {
         }
     },
 
-    // NUEVA FUNCIÓN: Scroll a una pregunta específica
     scrollToQuestion: function(qId) {
-        // Normalizamos el ID como lo hicimos en el render
         const elementId = `question-${qId.replace(/\./g, '-')}`;
         const element = document.getElementById(elementId);
-        
         if (element) {
-            // No necesitamos cálculo manual complicado porque usamos CSS scroll-mt-28 en el elemento
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     },
@@ -789,22 +711,15 @@ const app = {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    printReport: async function(countryName) {
-        try {
-            await supabase.from('descargas_informes').insert({ pais: countryName });
-        } catch (e) {
-            console.error('Error logging print', e);
-        }
+    printReport: function() {
         window.print();
     },
     
     setupGlobalEvents: function() {
-        // Exponer app globalmente para los onclicks del HTML
         window.app = this;
     }
 };
 
-// Iniciar aplicación
 document.addEventListener('DOMContentLoaded', () => {
     app.init();
 });
