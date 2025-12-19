@@ -240,7 +240,7 @@ const app = {
             <div class="animate-in fade-in duration-500">
                 <div class="text-center mb-10 max-w-3xl mx-auto">
                     <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Investigación con personas y grupos vulnerables</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-emerald-500">Investigación con personas y grupos especiales</span>
                     </h1>
                     <p class="text-lg text-slate-500 mb-8">
                         Análisis específico de normativas para investigación con mujeres embarazadas, niños, comunidades indígenas y personas con capacidad disminuida.
@@ -271,7 +271,7 @@ const app = {
                     <div class="relative w-full max-w-2xl mx-auto h-[500px] md:h-[600px] bg-teal-50/50 rounded-3xl border border-teal-100 shadow-inner overflow-hidden flex items-center justify-center p-4">
                         <div class="absolute top-4 right-4 bg-white/80 backdrop-blur p-3 rounded-lg border border-teal-100 text-xs text-teal-800 z-10 max-w-xs shadow-sm">
                             <p class="font-bold mb-1">Mapa Interactivo (PV)</p>
-                            <p>Selecciona un país para ver información normativa (investigación con personas y grupos vulnerables). </p>
+                            <p>Selecciona un país para ver información normativa (investigación con personas y grupos especiales). </p>
                         </div>
                         <svg viewBox="0 0 500 500" class="w-full h-full drop-shadow-xl" style="filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))">
                             ${mapPathsHtml}
@@ -411,7 +411,7 @@ const app = {
                             <span class="fi fi-${flagCode} text-5xl rounded shadow-sm"></span>
                             <div>
                                 <h2 class="text-4xl font-bold text-slate-900">${summary.pais}</h2>
-                                <span class="text-teal-600 font-bold text-sm uppercase tracking-wider">Módulo Investigación con personas y grupos vulnerables</span>
+                                <span class="text-teal-600 font-bold text-sm uppercase tracking-wider">Módulo Investigación con personas y grupos especiales</span>
                             </div>
                         </div>
                         <button onclick="app.printReport('${summary.pais}')" class="bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-teal-700 shadow-sm transition-all">
