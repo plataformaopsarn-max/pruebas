@@ -1,12 +1,7 @@
 // --- CONFIGURACIÓN Y CONSTANTES (POBLACIONES VULNERABLES) ---
 
-// Leer credenciales desde el archivo config.js inyectado
-const SUPABASE_URL = window.env?.SUPABASE_URL || '';
-const SUPABASE_KEY = window.env?.SUPABASE_KEY || '';
-
-if (!SUPABASE_URL || !SUPABASE_KEY) {
-    console.error("Faltan las credenciales de Supabase. Asegúrate de que config.js se haya cargado.");
-}
+const SUPABASE_URL = 'https://rhbudrqpetrzispcacyw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoYnVkcnFwZXRyemlzcGNhY3l3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1ODI4NTQsImV4cCI6MjA3NDE1ODg1NH0.6uQ2Hg1aLHAQoG3HwxJBeBbrFRGRxUilH-60CRNl3J8';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
