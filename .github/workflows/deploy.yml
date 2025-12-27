@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # PASO MÁGICO: Crea el archivo config.js usando los secretos guardados
       - name: Generar config.js
@@ -33,7 +33,7 @@ jobs:
           echo "};" >> config.js
 
       - name: Configurar Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v4
 
       - name: Subir sitio
         uses: actions/upload-pages-artifact@v1
